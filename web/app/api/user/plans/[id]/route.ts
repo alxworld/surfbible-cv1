@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { userPlans } from "@/lib/db/schema";
+import { userPlans, plans } from "@/lib/db/schema";
 import { getDbUser } from "@/lib/auth";
-import { eq, and } from "drizzle-orm";
+import { eq, and, ne } from "drizzle-orm";
 
 export async function PUT(
   req: Request,
@@ -37,6 +37,19 @@ export async function PUT(
   if (action === "resume") {
     if (enrollment.status !== "paused")
       return NextResponse.json({ error: "Plan is not paused" }, { status: 400 });
+
+    const [activePlan] = await db
+      .select({ id: userPlans.id, title: plans.title })
+      .from(userPlans)
+      .innerJoin(plans, eq(userPlans.planId, plans.id))
+      .where(and(eq(userPlans.userId, user.id), eq(userPlans.status, "active"), ne(userPlans.id, id)));
+    if (activePlan) {
+      return NextResponse.json(
+        { error: "active_plan_exists", enrollmentId: activePlan.id, planTitle: activePlan.title },
+        { status: 409 }
+      );
+    }
+
     const [updated] = await db
       .update(userPlans)
       .set({ status: "active", pausedAt: null })

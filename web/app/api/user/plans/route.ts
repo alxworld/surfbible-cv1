@@ -49,6 +49,19 @@ export async function POST(req: Request) {
     .where(and(eq(userPlans.userId, user.id), eq(userPlans.planId, planId)));
   if (existing) return NextResponse.json(existing);
 
+  // enforce one active plan at a time
+  const [activePlan] = await db
+    .select({ id: userPlans.id, title: plans.title })
+    .from(userPlans)
+    .innerJoin(plans, eq(userPlans.planId, plans.id))
+    .where(and(eq(userPlans.userId, user.id), eq(userPlans.status, "active")));
+  if (activePlan) {
+    return NextResponse.json(
+      { error: "active_plan_exists", enrollmentId: activePlan.id, planTitle: activePlan.title },
+      { status: 409 }
+    );
+  }
+
   const [enrolled] = await db.insert(userPlans).values({
     userId: user.id,
     planId,

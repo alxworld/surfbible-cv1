@@ -1,13 +1,14 @@
 import { db } from "@/lib/db";
 import { userPlans, plans, planDays } from "@/lib/db/schema";
 import { getDbUser } from "@/lib/auth";
-import { eq, and } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
 import { bookName } from "@/lib/osis";
 import { hasMissedDay } from "@/lib/streak";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import MarkCompleteButton from "./MarkCompleteButton";
 import RecoveryBanner from "./RecoveryBanner";
+import ResumeButton from "./ResumeButton";
 
 export default async function DashboardPage() {
   const user = await getDbUser();
@@ -27,9 +28,12 @@ export default async function DashboardPage() {
     })
     .from(userPlans)
     .innerJoin(plans, eq(userPlans.planId, plans.id))
-    .where(and(eq(userPlans.userId, user.id), eq(userPlans.status, "active")));
+    .where(and(eq(userPlans.userId, user.id), inArray(userPlans.status, ["active", "paused"])));
 
-  if (enrollments.length === 0) {
+  const active = enrollments.find(e => e.status === "active") ?? null;
+  const paused = enrollments.filter(e => e.status === "paused");
+
+  if (!active && paused.length === 0) {
     return (
       <main className="bg-[#0f172a] min-h-[calc(100svh-3.5rem)] flex items-center justify-center px-4">
         <div className="text-center">
@@ -48,43 +52,42 @@ export default async function DashboardPage() {
     );
   }
 
-  const todayRows = await Promise.all(
-    enrollments.map((e) =>
-      db
-        .select()
-        .from(planDays)
-        .where(and(eq(planDays.planId, e.planId), eq(planDays.dayNumber, e.currentDay)))
-        .then((rows) => rows[0] ?? null)
-    )
-  );
+  // Fetch today's reading for the active plan
+  let passages: { book: string; ref: string }[] = [];
+  if (active) {
+    const [today] = await db
+      .select()
+      .from(planDays)
+      .where(and(eq(planDays.planId, active.planId), eq(planDays.dayNumber, active.currentDay)));
+    passages = today ? (today.passages as { book: string; ref: string }[]) : [];
+  }
 
-  const activePlans = enrollments.map((enrollment, i) => {
-    const today = todayRows[i];
-    const passages = today ? (today.passages as { book: string; ref: string }[]) : [];
-    const missed = hasMissedDay(enrollment.lastReadAt, user.timezone);
-    const freezeAvailable = !enrollment.freezeUsedThisMonth && enrollment.streakCount > 0;
-    const pct = Math.round((enrollment.currentDay / enrollment.plan.totalDays) * 100);
-    return { enrollment, passages, missed, freezeAvailable, pct };
-  });
+  const missed = active ? hasMissedDay(active.lastReadAt, user.timezone) : false;
+  const freezeAvailable = active
+    ? !active.freezeUsedThisMonth && active.streakCount > 0
+    : false;
+  const pct = active
+    ? Math.round((active.currentDay / active.plan.totalDays) * 100)
+    : 0;
 
   return (
     <main className="bg-[#0f172a] min-h-[calc(100svh-3.5rem)]">
       <div className="max-w-lg mx-auto px-4 py-8 space-y-8">
-        {activePlans.map(({ enrollment, passages, missed, freezeAvailable, pct }) => (
-          <div key={enrollment.id}>
-            {/* Header */}
+
+        {/* Active plan */}
+        {active ? (
+          <div>
             <div className="flex items-start justify-between mb-5">
               <div>
-                <h1 className="text-xl font-bold text-slate-100">{enrollment.plan.title}</h1>
-                <p className="text-slate-400 text-sm mt-0.5">Day {enrollment.currentDay} of {enrollment.plan.totalDays}</p>
+                <h1 className="text-xl font-bold text-slate-100">{active.plan.title}</h1>
+                <p className="text-slate-400 text-sm mt-0.5">Day {active.currentDay} of {active.plan.totalDays}</p>
               </div>
               <div className="flex flex-col items-center bg-[#162033] border border-[#d4a843]/20 rounded-2xl px-4 py-2 shadow-sm min-w-[60px]">
-                <span className="text-2xl font-bold text-[#d4a843] leading-none">{enrollment.streakCount}</span>
+                <span className="text-2xl font-bold text-[#d4a843] leading-none">{active.streakCount}</span>
                 <span className="text-[10px] text-slate-400 mt-0.5 uppercase tracking-wide">streak</span>
               </div>
             </div>
 
-            {/* Progress bar */}
             <div className="mb-5">
               <div className="h-1.5 bg-[#d4a843]/15 rounded-full overflow-hidden">
                 <div className="h-full bg-[#d4a843] rounded-full transition-all" style={{ width: `${pct}%` }} />
@@ -93,10 +96,9 @@ export default async function DashboardPage() {
             </div>
 
             {missed && (
-              <RecoveryBanner enrollmentId={enrollment.id} freezeAvailable={freezeAvailable} />
+              <RecoveryBanner enrollmentId={active.id} freezeAvailable={freezeAvailable} />
             )}
 
-            {/* Today's readings */}
             <div className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-5 mb-4">
               <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Today&apos;s readings</h2>
               <ul className="space-y-2.5">
@@ -110,20 +112,49 @@ export default async function DashboardPage() {
               </ul>
             </div>
 
-            {/* Action buttons */}
             <div className="flex gap-3">
               <Link
-                href={`/read/${enrollment.id}`}
+                href={`/read/${active.id}`}
                 className="flex-1 text-center bg-[#162033] border-2 border-[#d4a843] text-[#d4a843] py-3 rounded-xl hover:bg-[#d4a843]/8 text-sm font-semibold transition-colors"
               >
                 Read passages
               </Link>
-              <MarkCompleteButton enrollmentId={enrollment.id} />
+              <MarkCompleteButton enrollmentId={active.id} />
             </div>
           </div>
-        ))}
+        ) : (
+          <div className="text-center py-4">
+            <p className="text-slate-400 text-sm mb-4">No active plan — resume one below or start a new one.</p>
+            <Link href="/plans" className="inline-block bg-[#d4a843] text-[#080d1a] text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-[#e0bc60] transition-colors">
+              Browse plans
+            </Link>
+          </div>
+        )}
 
-        {/* Divider */}
+        {/* Paused plans */}
+        {paused.length > 0 && (
+          <div>
+            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Paused</h2>
+            <div className="flex flex-col gap-2">
+              {paused.map(e => (
+                <div key={e.id} className="flex items-center justify-between bg-[#162033] border border-[#d4a843]/10 rounded-2xl px-4 py-3">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-300">{e.plan.title}</p>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Day {e.currentDay} of {e.plan.totalDays} &middot; {e.streakCount} day streak
+                    </p>
+                  </div>
+                  <ResumeButton
+                    enrollmentId={e.id}
+                    activeEnrollmentId={active?.id}
+                    activePlanTitle={active?.plan.title}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="border-t border-[#d4a843]/10" />
 
         {/* Sub-nav */}
@@ -146,6 +177,7 @@ export default async function DashboardPage() {
             </Link>
           ))}
         </div>
+
       </div>
     </main>
   );

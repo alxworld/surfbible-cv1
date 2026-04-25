@@ -23,6 +23,7 @@ Living document. Update checkboxes as steps are completed.
 | 1.8 | Notes & Reflections | Complete |
 | 1.9 | Email delivery (Resend) | Complete |
 | 1.10 | Security hardening | Complete |
+| 1.11 | One-active-plan enforcement | Complete |
 | 2.0 | PWA & Offline reading | Not started |
 
 **Total routes:** 41 (verified clean build 2026-04-25)  
@@ -297,6 +298,18 @@ The cron routes already exist and queue `notifications` rows. This phase wires u
 ### Remaining (low priority)
 - [ ] Rate limiting on invite-code endpoints (`/api/user/church`, `/api/groups/join`) — needs Upstash Redis or Vercel rate limiting
 - [ ] Vercel cron config — restrict cron invocations to Vercel's internal network
+
+---
+
+## Phase 1.11 — One Active Plan Enforcement
+
+Rule: a user may have only one `active` plan at a time. Paused plans are preserved with their streak intact.
+
+- [x] `app/api/user/plans/route.ts` — `POST` rejects with 409 + `{ error: "active_plan_exists", enrollmentId, planTitle }` if user already has an active plan
+- [x] `app/api/user/plans/[id]/route.ts` — `resume` action rejects with same 409 if another active plan exists
+- [x] `app/plans/EnrollButton.tsx` — on 409: shows inline confirm "This will pause {title}. Continue?" → pauses active plan then re-enrolls
+- [x] `app/dashboard/ResumeButton.tsx` — new component; shows same confirm when resuming a paused plan while another is active
+- [x] `app/dashboard/page.tsx` — fetches active + paused enrollments; renders single active plan card + compact paused plans section with Resume buttons
 
 ---
 
