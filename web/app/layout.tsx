@@ -10,8 +10,30 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SurfBible — Daily Bible Reading",
-  description: "Your church's daily companion for reading and growing in the Word.",
+  metadataBase: new URL("https://surfbible.in"),
+  title: {
+    default: "SurfBible — Daily Bible Reading",
+    template: "%s | SurfBible",
+  },
+  description: "Structured daily Bible reading plans for churches and individuals. Track your streak, read together, grow in the Word.",
+  keywords: ["bible reading plan", "daily bible reading", "church bible study", "navigators plan", "bible streak"],
+  openGraph: {
+    type: "website",
+    siteName: "SurfBible",
+    locale: "en_US",
+    url: "https://surfbible.in",
+    title: "SurfBible — Daily Bible Reading",
+    description: "Structured daily Bible reading plans for churches and individuals.",
+    images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "SurfBible" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SurfBible — Daily Bible Reading",
+    description: "Structured daily Bible reading plans for churches and individuals.",
+    images: ["/opengraph-image.png"],
+  },
+  robots: { index: true, follow: true },
+  alternates: { canonical: "https://surfbible.in" },
 };
 
 export default async function RootLayout({

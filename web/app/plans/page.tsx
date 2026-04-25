@@ -1,8 +1,20 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { plans } from "@/lib/db/schema";
 import { getDbUser } from "@/lib/auth";
 import { eq, or } from "drizzle-orm";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Bible Reading Plans",
+  description: "Choose from the Navigators Plan, NT in 90 Days, Psalms & Proverbs, and more. Free structured reading plans for every season of faith.",
+  openGraph: {
+    url: "https://surfbible.in/plans",
+    title: "Bible Reading Plans — SurfBible",
+    description: "Choose from the Navigators Plan, NT in 90 Days, Psalms & Proverbs, and more.",
+  },
+  alternates: { canonical: "https://surfbible.in/plans" },
+};
 
 const PLAN_META: Record<string, { tag: string }> = {
   navigators:      { tag: "300 days" },

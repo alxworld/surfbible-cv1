@@ -3,7 +3,7 @@
 Living document. Update checkboxes as steps are completed.
 
 **Last updated:** 2026-04-25  
-**Status:** Phases 0–1.9 complete + Security hardening complete. Active work starts at Phase 2.0.
+**Status:** Phases 0–1.11 complete + SEO Phase 1 complete. Active work: Phase 1.12 SEO remaining items.
 
 ---
 
@@ -24,6 +24,7 @@ Living document. Update checkboxes as steps are completed.
 | 1.9 | Email delivery (Resend) | Complete |
 | 1.10 | Security hardening | Complete |
 | 1.11 | One-active-plan enforcement | Complete |
+| 1.12 | SEO — indexability + metadata | Partial (code done, design pending) |
 | 2.0 | PWA & Offline reading | Not started |
 
 **Total routes:** 41 (verified clean build 2026-04-25)  

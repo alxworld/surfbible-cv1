@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
+
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 import { userPlans, plans, planDays, userDayProgress } from "@/lib/db/schema";
 import { getDbUser } from "@/lib/auth";
 import { eq, and } from "drizzle-orm";

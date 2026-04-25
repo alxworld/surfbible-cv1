@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { plans, planDays } from "@/lib/db/schema";
 import { getDbUser } from "@/lib/auth";
@@ -6,6 +7,30 @@ import { notFound } from "next/navigation";
 import { bookName } from "@/lib/osis";
 import Link from "next/link";
 import EnrollButton from "../EnrollButton";
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ id: string }> }
+): Promise<Metadata> {
+  const { id } = await params;
+  const [plan] = await db.select().from(plans).where(eq(plans.id, id)).limit(1);
+  if (!plan) return {};
+
+  const title = plan.title;
+  const description = plan.description
+    ?? `A ${plan.totalDays}-day Bible reading plan. Read structured passages every day and track your progress.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title: `${title} — SurfBible`,
+      description,
+      url: `https://surfbible.in/plans/${id}`,
+    },
+    alternates: { canonical: `https://surfbible.in/plans/${id}` },
+    robots: plan.isPublic ? { index: true, follow: true } : { index: false },
+  };
+}
 
 export default async function PlanDetailPage({
   params,

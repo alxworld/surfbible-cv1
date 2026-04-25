@@ -1,4 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "SurfBible — Read the Bible Every Day",
+  description: "Daily Bible reading plans for your church. Track streaks, read in groups, and grow together in the Word. Free forever.",
+  openGraph: {
+    url: "https://surfbible.in",
+    title: "SurfBible — Read the Bible Every Day",
+    description: "Daily Bible reading plans for your church.",
+  },
+  alternates: { canonical: "https://surfbible.in" },
+};
 
 export default function Home() {
   return (
