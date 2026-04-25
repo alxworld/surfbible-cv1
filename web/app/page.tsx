@@ -165,7 +165,7 @@ function Plans() {
         Structured plans for every season of faith
       </p>
 
-      <div className="flex gap-3.5 overflow-x-auto px-5 pb-1 snap-x snap-mandatory scrollbar-hide">
+      <div className="flex gap-3.5 overflow-x-auto px-5 pb-1 snap-x snap-mandatory scrollbar-hide justify-center">
         <PlanCard title="Navigators Plan"   days={300} desc="2 NT + 2 OT passages daily. The classic whole-Bible discipleship plan." tag="Most Popular" tagCls="bg-[#d4a843]/15 text-[#d4a843]"   dot="bg-[#d4a843]" />
         <PlanCard title="NT in 90 Days"     days={90}  desc="The entire New Testament in three months. Ideal for new believers."     tag="Quick Start"  tagCls="bg-[#d4a843]/10 text-[#e0bc60]"  dot="bg-[#e0bc60]" />
         <PlanCard title="Psalms & Proverbs" days={30}  desc="Wisdom and worship in one month. A focused devotional journey."         tag="30 Days"      tagCls="bg-[#d4a843]/10 text-[#c8982e]"  dot="bg-[#c8982e]" />
