@@ -48,81 +48,86 @@ export default async function DashboardPage() {
     );
   }
 
-  const enrollment = enrollments[0];
+  const todayRows = await Promise.all(
+    enrollments.map((e) =>
+      db
+        .select()
+        .from(planDays)
+        .where(and(eq(planDays.planId, e.planId), eq(planDays.dayNumber, e.currentDay)))
+        .then((rows) => rows[0] ?? null)
+    )
+  );
 
-  const [today] = await db
-    .select()
-    .from(planDays)
-    .where(
-      and(
-        eq(planDays.planId, enrollment.planId),
-        eq(planDays.dayNumber, enrollment.currentDay)
-      )
-    );
-
-  const passages = today
-    ? (today.passages as { book: string; ref: string }[])
-    : [];
-
-  const missed = hasMissedDay(enrollment.lastReadAt, user.timezone);
-  const freezeAvailable = !enrollment.freezeUsedThisMonth && enrollment.streakCount > 0;
-  const pct = Math.round((enrollment.currentDay / enrollment.plan.totalDays) * 100);
+  const activePlans = enrollments.map((enrollment, i) => {
+    const today = todayRows[i];
+    const passages = today ? (today.passages as { book: string; ref: string }[]) : [];
+    const missed = hasMissedDay(enrollment.lastReadAt, user.timezone);
+    const freezeAvailable = !enrollment.freezeUsedThisMonth && enrollment.streakCount > 0;
+    const pct = Math.round((enrollment.currentDay / enrollment.plan.totalDays) * 100);
+    return { enrollment, passages, missed, freezeAvailable, pct };
+  });
 
   return (
     <main className="bg-[#0f172a] min-h-[calc(100svh-3.5rem)]">
-      <div className="max-w-lg mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-start justify-between mb-5">
-          <div>
-            <h1 className="text-xl font-bold text-slate-100">{enrollment.plan.title}</h1>
-            <p className="text-slate-400 text-sm mt-0.5">Day {enrollment.currentDay} of {enrollment.plan.totalDays}</p>
+      <div className="max-w-lg mx-auto px-4 py-8 space-y-8">
+        {activePlans.map(({ enrollment, passages, missed, freezeAvailable, pct }) => (
+          <div key={enrollment.id}>
+            {/* Header */}
+            <div className="flex items-start justify-between mb-5">
+              <div>
+                <h1 className="text-xl font-bold text-slate-100">{enrollment.plan.title}</h1>
+                <p className="text-slate-400 text-sm mt-0.5">Day {enrollment.currentDay} of {enrollment.plan.totalDays}</p>
+              </div>
+              <div className="flex flex-col items-center bg-[#162033] border border-[#d4a843]/20 rounded-2xl px-4 py-2 shadow-sm min-w-[60px]">
+                <span className="text-2xl font-bold text-[#d4a843] leading-none">{enrollment.streakCount}</span>
+                <span className="text-[10px] text-slate-400 mt-0.5 uppercase tracking-wide">streak</span>
+              </div>
+            </div>
+
+            {/* Progress bar */}
+            <div className="mb-5">
+              <div className="h-1.5 bg-[#d4a843]/15 rounded-full overflow-hidden">
+                <div className="h-full bg-[#d4a843] rounded-full transition-all" style={{ width: `${pct}%` }} />
+              </div>
+              <p className="text-xs text-slate-400 mt-1 text-right">{pct}% complete</p>
+            </div>
+
+            {missed && (
+              <RecoveryBanner enrollmentId={enrollment.id} freezeAvailable={freezeAvailable} />
+            )}
+
+            {/* Today's readings */}
+            <div className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-5 mb-4">
+              <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Today&apos;s readings</h2>
+              <ul className="space-y-2.5">
+                {passages.map((p, i) => (
+                  <li key={i} className="flex items-center gap-2.5 text-sm">
+                    <span className="w-2 h-2 rounded-full bg-[#d4a843] shrink-0" />
+                    <span className="font-semibold text-slate-100">{bookName(p.book)}</span>
+                    <span className="text-slate-400">{p.ref}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex gap-3">
+              <Link
+                href={`/read/${enrollment.id}`}
+                className="flex-1 text-center bg-[#162033] border-2 border-[#d4a843] text-[#d4a843] py-3 rounded-xl hover:bg-[#d4a843]/8 text-sm font-semibold transition-colors"
+              >
+                Read passages
+              </Link>
+              <MarkCompleteButton enrollmentId={enrollment.id} />
+            </div>
           </div>
-          {/* Streak badge */}
-          <div className="flex flex-col items-center bg-[#162033] border border-[#d4a843]/20 rounded-2xl px-4 py-2 shadow-sm min-w-[60px]">
-            <span className="text-2xl font-bold text-[#d4a843] leading-none">{enrollment.streakCount}</span>
-            <span className="text-[10px] text-slate-400 mt-0.5 uppercase tracking-wide">streak</span>
-          </div>
-        </div>
+        ))}
 
-        {/* Progress bar */}
-        <div className="mb-5">
-          <div className="h-1.5 bg-[#d4a843]/15 rounded-full overflow-hidden">
-            <div className="h-full bg-[#d4a843] rounded-full transition-all" style={{ width: `${pct}%` }} />
-          </div>
-          <p className="text-xs text-slate-400 mt-1 text-right">{pct}% complete</p>
-        </div>
-
-        {missed && (
-          <RecoveryBanner enrollmentId={enrollment.id} freezeAvailable={freezeAvailable} />
-        )}
-
-        {/* Today's readings */}
-        <div className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-5 mb-4">
-          <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Today&apos;s readings</h2>
-          <ul className="space-y-2.5">
-            {passages.map((p, i) => (
-              <li key={i} className="flex items-center gap-2.5 text-sm">
-                <span className="w-2 h-2 rounded-full bg-[#d4a843] shrink-0" />
-                <span className="font-semibold text-slate-100">{bookName(p.book)}</span>
-                <span className="text-slate-400">{p.ref}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Action buttons */}
-        <div className="flex gap-3 mb-6">
-          <Link
-            href={`/read/${enrollment.id}`}
-            className="flex-1 text-center bg-[#162033] border-2 border-[#d4a843] text-[#d4a843] py-3 rounded-xl hover:bg-[#d4a843]/8 text-sm font-semibold transition-colors"
-          >
-            Read passages
-          </Link>
-          <MarkCompleteButton enrollmentId={enrollment.id} />
-        </div>
+        {/* Divider */}
+        <div className="border-t border-[#d4a843]/10" />
 
         {/* Sub-nav */}
-        <div className="flex gap-3 justify-center">
+        <div className="flex gap-3 justify-center flex-wrap">
           {[
             { href: "/dashboard/calendar", label: "Calendar" },
             { href: "/dashboard/stats", label: "Stats" },
@@ -141,12 +146,6 @@ export default async function DashboardPage() {
             </Link>
           ))}
         </div>
-
-        {enrollments.length > 1 && (
-          <p className="text-xs text-slate-400 mt-4 text-center">
-            +{enrollments.length - 1} more active plan(s)
-          </p>
-        )}
       </div>
     </main>
   );
