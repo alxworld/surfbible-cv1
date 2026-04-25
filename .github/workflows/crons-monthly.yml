@@ -1,0 +1,15 @@
+name: Monthly Reset
+
+on:
+  schedule:
+    - cron: '5 0 1 * *'
+  workflow_dispatch:
+
+jobs:
+  monthly-reset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reset freeze flag for all active plans
+        run: |
+          curl -sf -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://surfbible.in/api/crons/monthly-reset

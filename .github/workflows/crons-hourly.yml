@@ -1,0 +1,30 @@
+name: Hourly Crons
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  run-crons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Daily reminder
+        run: |
+          curl -sf -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://surfbible.in/api/crons/reminder
+
+      - name: Streak alert
+        run: |
+          curl -sf -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://surfbible.in/api/crons/streak-alert
+
+      - name: Auto freeze
+        run: |
+          curl -sf -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://surfbible.in/api/crons/auto-freeze
+
+      - name: Weekly summary (route self-guards to Sunday 08:00 local)
+        run: |
+          curl -sf -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://surfbible.in/api/crons/weekly
