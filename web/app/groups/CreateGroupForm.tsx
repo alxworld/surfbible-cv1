@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+const inputCls = "w-full border border-slate-600 bg-[#0f172a] rounded-lg px-3 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#d4a843]/50 transition";
+
 export default function CreateGroupForm({ plans }: { plans: { id: string; title: string }[] }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -30,7 +32,7 @@ export default function CreateGroupForm({ plans }: { plans: { id: string; title:
     return (
       <button
         onClick={() => setOpen(true)}
-        className="w-full bg-emerald-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-emerald-700 transition-colors"
+        className="w-full bg-[#d4a843] text-[#080d1a] text-sm font-semibold py-3 rounded-xl hover:bg-[#e0bc60] transition-colors"
       >
         Create a group
       </button>
@@ -38,34 +40,34 @@ export default function CreateGroupForm({ plans }: { plans: { id: string; title:
   }
 
   return (
-    <form onSubmit={submit} className="bg-white border border-emerald-100 rounded-2xl p-5 shadow-sm space-y-4">
-      <h3 className="font-semibold text-stone-900">New reading group</h3>
+    <form onSubmit={submit} className="bg-[#162033] border border-[#d4a843]/15 rounded-2xl p-5 shadow-sm space-y-4">
+      <h3 className="font-semibold text-slate-100">New reading group</h3>
       <div>
-        <label className="block text-xs font-medium text-stone-500 mb-1">Group name</label>
+        <label className="block text-xs font-medium text-slate-400 mb-1">Group name</label>
         <input
           required
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder="e.g. Morning Bible Study"
-          className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          className={inputCls}
         />
       </div>
       <div>
-        <label className="block text-xs font-medium text-stone-500 mb-1">Reading plan</label>
+        <label className="block text-xs font-medium text-slate-400 mb-1">Reading plan</label>
         <select
           value={planId}
           onChange={e => setPlanId(e.target.value)}
-          className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          className={inputCls}
         >
           {plans.map(p => <option key={p.id} value={p.id}>{p.title}</option>)}
         </select>
       </div>
-      {error && <p className="text-xs text-red-500">{error}</p>}
+      {error && <p className="text-xs text-red-400">{error}</p>}
       <div className="flex gap-2">
-        <button type="button" onClick={() => setOpen(false)} className="flex-1 border border-stone-200 text-stone-600 text-sm py-2.5 rounded-xl hover:bg-stone-50 transition-colors">
+        <button type="button" onClick={() => setOpen(false)} className="flex-1 border border-slate-600 text-slate-400 text-sm py-2.5 rounded-xl hover:border-slate-500 transition-colors">
           Cancel
         </button>
-        <button type="submit" disabled={busy} className="flex-1 bg-emerald-600 text-white text-sm font-semibold py-2.5 rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-colors">
+        <button type="submit" disabled={busy} className="flex-1 bg-[#d4a843] text-[#080d1a] text-sm font-semibold py-2.5 rounded-xl hover:bg-[#e0bc60] disabled:opacity-50 transition-colors">
           {busy ? "Creating..." : "Create"}
         </button>
       </div>

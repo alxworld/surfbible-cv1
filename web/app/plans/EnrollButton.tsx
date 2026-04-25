@@ -22,7 +22,7 @@ export default function EnrollButton({ planId }: { planId: string }) {
     <button
       onClick={enroll}
       disabled={pending}
-      className="w-full bg-emerald-600 text-white text-sm font-semibold px-6 py-3 rounded-xl hover:bg-emerald-700 active:scale-[0.98] disabled:opacity-50 transition-all shadow-sm"
+      className="w-full bg-[#d4a843] text-[#080d1a] text-sm font-semibold px-6 py-3 rounded-xl hover:bg-[#e0bc60] active:scale-[0.98] disabled:opacity-50 transition-all shadow-sm"
     >
       {pending ? "Starting…" : "Start Reading"}
     </button>

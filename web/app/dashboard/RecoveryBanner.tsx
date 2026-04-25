@@ -24,8 +24,8 @@ export default function RecoveryBanner({ enrollmentId, freezeAvailable }: Props)
   }
 
   return (
-    <div className="border border-amber-200 bg-amber-50 rounded-2xl p-4 mb-5">
-      <p className="text-sm font-medium text-amber-900 mb-3">
+    <div className="border border-[#d4a843]/30 bg-[#d4a843]/8 rounded-2xl p-4 mb-5">
+      <p className="text-sm font-medium text-[#e0bc60] mb-3">
         You missed a day — your streak is at risk. What would you like to do?
       </p>
       <div className="flex flex-wrap gap-2">
@@ -33,7 +33,7 @@ export default function RecoveryBanner({ enrollmentId, freezeAvailable }: Props)
           <button
             onClick={() => callApi("freeze", {})}
             disabled={loading !== null}
-            className="text-xs px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 font-medium"
+            className="text-xs px-3 py-1.5 rounded-lg bg-[#d4a843] text-[#080d1a] hover:bg-[#e0bc60] disabled:opacity-50 font-medium"
           >
             {loading === "freeze" ? "Applying…" : "Use streak freeze"}
           </button>
@@ -41,14 +41,14 @@ export default function RecoveryBanner({ enrollmentId, freezeAvailable }: Props)
         <button
           onClick={() => callApi("recover", { action: "skip" })}
           disabled={loading !== null}
-          className="text-xs px-3 py-1.5 rounded-lg bg-stone-700 text-white hover:bg-stone-800 disabled:opacity-50 font-medium"
+          className="text-xs px-3 py-1.5 rounded-lg bg-slate-700 text-white hover:bg-slate-600 disabled:opacity-50 font-medium"
         >
           {loading === "recover" ? "Skipping…" : "Skip missed day"}
         </button>
         <button
           onClick={() => callApi("recover", { action: "restart" })}
           disabled={loading !== null}
-          className="text-xs px-3 py-1.5 rounded-lg border border-stone-300 text-stone-600 hover:bg-stone-100 disabled:opacity-50 font-medium"
+          className="text-xs px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-700 disabled:opacity-50 font-medium"
         >
           Restart plan
         </button>

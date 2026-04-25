@@ -34,12 +34,12 @@ export default function MonthGrid({ completedDates }: { completedDates: string[]
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <button onClick={prev} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-emerald-50 text-stone-500 hover:text-emerald-600 transition-colors text-sm">←</button>
-        <span className="font-semibold text-stone-900">{label}</span>
-        <button onClick={next} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-emerald-50 text-stone-500 hover:text-emerald-600 transition-colors text-sm">→</button>
+        <button onClick={prev} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#d4a843]/10 text-slate-400 hover:text-[#d4a843] transition-colors text-sm">←</button>
+        <span className="font-semibold text-slate-100">{label}</span>
+        <button onClick={next} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#d4a843]/10 text-slate-400 hover:text-[#d4a843] transition-colors text-sm">→</button>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 text-center text-xs text-stone-400 mb-2">
+      <div className="grid grid-cols-7 gap-1 text-center text-xs text-slate-500 mb-2">
         {DAYS.map(d => <div key={d} className="py-1">{d}</div>)}
       </div>
 
@@ -54,9 +54,9 @@ export default function MonthGrid({ completedDates }: { completedDates: string[]
               key={i}
               className={[
                 "aspect-square flex items-center justify-center rounded-full text-sm font-medium transition-colors",
-                done ? "bg-emerald-500 text-white" : "",
-                isToday && !done ? "ring-2 ring-emerald-400 text-emerald-600 font-bold" : "",
-                !done && !isToday ? "text-stone-600 hover:bg-green-50" : "",
+                done ? "bg-[#d4a843] text-[#080d1a]" : "",
+                isToday && !done ? "ring-2 ring-[#d4a843] text-[#d4a843] font-bold" : "",
+                !done && !isToday ? "text-slate-400 hover:bg-[#d4a843]/10" : "",
               ].join(" ")}
             >
               {day}
@@ -65,17 +65,17 @@ export default function MonthGrid({ completedDates }: { completedDates: string[]
         })}
       </div>
 
-      <div className="flex gap-4 mt-4 text-xs text-stone-400">
+      <div className="flex gap-4 mt-4 text-xs text-slate-400">
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block" /> Read
+          <span className="w-3 h-3 rounded-full bg-[#d4a843] inline-block" /> Read
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-full ring-2 ring-emerald-400 inline-block" /> Today
+          <span className="w-3 h-3 rounded-full ring-2 ring-[#d4a843] inline-block" /> Today
         </span>
       </div>
 
       <div className="mt-6 text-center">
-        <Link href="/dashboard" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+        <Link href="/dashboard" className="text-sm text-[#d4a843] hover:text-[#e0bc60] font-medium">
           ← Back to dashboard
         </Link>
       </div>

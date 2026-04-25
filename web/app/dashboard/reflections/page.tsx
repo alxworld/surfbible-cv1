@@ -57,14 +57,14 @@ export default async function ReflectionsPage({
     : rows;
 
   return (
-    <main className="bg-green-50 min-h-[calc(100svh-3.5rem)]">
+    <main className="bg-[#0f172a] min-h-[calc(100svh-3.5rem)]">
       <div className="max-w-2xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <Link href="/dashboard" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">← Dashboard</Link>
-            <h1 className="text-2xl font-bold text-stone-900 mt-1">My Reflections</h1>
+            <Link href="/dashboard" className="text-sm text-[#d4a843] hover:text-[#e0bc60] font-medium">← Dashboard</Link>
+            <h1 className="text-2xl font-bold text-slate-100 mt-1">My Reflections</h1>
           </div>
-          <span className="text-sm text-stone-400">{filtered.length} entr{filtered.length !== 1 ? "ies" : "y"}</span>
+          <span className="text-sm text-slate-400">{filtered.length} entr{filtered.length !== 1 ? "ies" : "y"}</span>
         </div>
 
         {/* Book filter */}
@@ -74,8 +74,8 @@ export default async function ReflectionsPage({
               href="/dashboard/reflections"
               className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-colors ${
                 !filterBook
-                  ? "bg-emerald-600 text-white border-emerald-600"
-                  : "bg-white text-stone-600 border-stone-200 hover:border-emerald-300"
+                  ? "bg-[#d4a843] text-[#080d1a] border-[#d4a843]"
+                  : "bg-[#162033] text-slate-400 border-[#d4a843]/20 hover:border-[#d4a843]/50"
               }`}
             >
               All
@@ -86,8 +86,8 @@ export default async function ReflectionsPage({
                 href={`/dashboard/reflections?book=${code}`}
                 className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-colors ${
                   filterBook === code
-                    ? "bg-emerald-600 text-white border-emerald-600"
-                    : "bg-white text-stone-600 border-stone-200 hover:border-emerald-300"
+                    ? "bg-[#d4a843] text-[#080d1a] border-[#d4a843]"
+                    : "bg-[#162033] text-slate-400 border-[#d4a843]/20 hover:border-[#d4a843]/50"
                 }`}
               >
                 {bookName(code)}
@@ -98,22 +98,22 @@ export default async function ReflectionsPage({
 
         {filtered.length === 0 ? (
           <div className="text-center py-16">
-            <p className="text-stone-400 text-sm">No reflections yet.</p>
-            <p className="text-stone-400 text-xs mt-1">Notes you write while reading will appear here.</p>
+            <p className="text-slate-400 text-sm">No reflections yet.</p>
+            <p className="text-slate-400 text-xs mt-1">Notes you write while reading will appear here.</p>
           </div>
         ) : (
           <div className="space-y-4">
             {filtered.map((row, i) => {
               const passages = row.passages as { book: string; ref: string }[];
               return (
-                <article key={i} className="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5">
+                <article key={i} className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-5">
                   {/* Day meta */}
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div>
-                      <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wide">{row.planTitle}</p>
-                      <p className="text-sm font-bold text-stone-900 mt-0.5">Day {row.dayNumber}</p>
+                      <p className="text-xs font-semibold text-[#d4a843] uppercase tracking-wide">{row.planTitle}</p>
+                      <p className="text-sm font-bold text-slate-100 mt-0.5">Day {row.dayNumber}</p>
                     </div>
-                    <p className="text-xs text-stone-400 shrink-0">
+                    <p className="text-xs text-slate-400 shrink-0">
                       {row.completedAt
                         ? new Date(row.completedAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })
                         : ""}
@@ -123,7 +123,7 @@ export default async function ReflectionsPage({
                   {/* Passages */}
                   <div className="flex flex-wrap gap-1.5 mb-3">
                     {passages.map((p, j) => (
-                      <span key={j} className="text-xs bg-emerald-50 border border-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
+                      <span key={j} className="text-xs bg-[#0f172a] border border-[#d4a843]/20 text-[#d4a843] px-2 py-0.5 rounded-full">
                         {bookName(p.book)} {p.ref}
                       </span>
                     ))}
@@ -132,16 +132,16 @@ export default async function ReflectionsPage({
                   {/* Notes */}
                   {row.notes && (
                     <div className="mb-2">
-                      <p className="text-[10px] font-semibold text-stone-400 uppercase tracking-wide mb-1">Notes</p>
-                      <p className="text-sm text-stone-700 whitespace-pre-wrap leading-relaxed">{row.notes}</p>
+                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Notes</p>
+                      <p className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">{row.notes}</p>
                     </div>
                   )}
 
                   {/* Reflection */}
                   {row.reflection && (
-                    <div className={row.notes ? "mt-3 pt-3 border-t border-emerald-50" : ""}>
-                      <p className="text-[10px] font-semibold text-stone-400 uppercase tracking-wide mb-1">Reflection</p>
-                      <p className="text-sm text-stone-700 italic whitespace-pre-wrap leading-relaxed">{row.reflection}</p>
+                    <div className={row.notes ? "mt-3 pt-3 border-t border-[#d4a843]/10" : ""}>
+                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Reflection</p>
+                      <p className="text-sm text-slate-300 italic whitespace-pre-wrap leading-relaxed">{row.reflection}</p>
                     </div>
                   )}
                 </article>

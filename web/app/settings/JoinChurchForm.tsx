@@ -27,23 +27,23 @@ export default function JoinChurchForm() {
   }
 
   return (
-    <form onSubmit={submit} className="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5">
-      <p className="text-sm font-semibold text-stone-700 mb-1">Join a church</p>
-      <p className="text-xs text-stone-400 mb-3">Enter the invite code your church admin shared.</p>
+    <form onSubmit={submit} className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-5">
+      <p className="text-sm font-semibold text-slate-200 mb-1">Join a church</p>
+      <p className="text-xs text-slate-400 mb-3">Enter the invite code your church admin shared.</p>
       <div className="flex gap-2">
         <input
           required
           value={code}
           onChange={e => setCode(e.target.value)}
           placeholder="12-character code"
-          className="flex-1 rounded-xl border border-stone-200 bg-stone-50 px-3 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-400 transition"
+          className="flex-1 rounded-xl border border-slate-600 bg-[#0f172a] px-3 py-2.5 text-sm font-mono text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#d4a843]/50 transition"
         />
         <button type="submit" disabled={busy}
-          className="bg-emerald-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-colors">
+          className="bg-[#d4a843] text-[#080d1a] text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-[#e0bc60] disabled:opacity-50 transition-colors">
           {busy ? "..." : "Join"}
         </button>
       </div>
-      {error && <p className="text-xs text-red-500 mt-2">{error}</p>}
+      {error && <p className="text-xs text-red-400 mt-2">{error}</p>}
     </form>
   );
 }

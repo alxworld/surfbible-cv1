@@ -11,6 +11,8 @@ interface Props {
 
 const TIMEZONES = Intl.supportedValuesOf("timeZone");
 
+const inputCls = "w-full rounded-xl border border-slate-600 bg-[#0f172a] px-4 py-2.5 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#d4a843]/50 focus:border-transparent transition";
+
 export default function SettingsForm({ displayName, timezone, reminderTime }: Props) {
   const [name, setName] = useState(displayName);
   const [tz, setTz] = useState(timezone);
@@ -34,57 +36,49 @@ export default function SettingsForm({ displayName, timezone, reminderTime }: Pr
 
   return (
     <div className="flex flex-col gap-5">
-      {/* Display name */}
-      <div className="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5">
-        <label className="block text-sm font-semibold text-stone-700 mb-2">Display name</label>
+      <div className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-5">
+        <label className="block text-sm font-semibold text-slate-300 mb-2">Display name</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Your name"
           maxLength={100}
-          className="w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition"
+          className={inputCls}
         />
       </div>
 
-      {/* Timezone */}
-      <div className="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5">
-        <label className="block text-sm font-semibold text-stone-700 mb-2">Timezone</label>
-        <p className="text-xs text-stone-400 mb-3">Used to send reminders at the right local time.</p>
-        <select
-          value={tz}
-          onChange={(e) => setTz(e.target.value)}
-          className="w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition"
-        >
+      <div className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-5">
+        <label className="block text-sm font-semibold text-slate-300 mb-2">Timezone</label>
+        <p className="text-xs text-slate-400 mb-3">Used to send reminders at the right local time.</p>
+        <select value={tz} onChange={(e) => setTz(e.target.value)} className={inputCls}>
           {TIMEZONES.map((z) => (
             <option key={z} value={z}>{z.replace(/_/g, " ")}</option>
           ))}
         </select>
       </div>
 
-      {/* Reminder time */}
-      <div className="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5">
-        <label className="block text-sm font-semibold text-stone-700 mb-2">Daily reminder time</label>
-        <p className="text-xs text-stone-400 mb-3">Leave blank to turn off reminders.</p>
+      <div className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-5">
+        <label className="block text-sm font-semibold text-slate-300 mb-2">Daily reminder time</label>
+        <p className="text-xs text-slate-400 mb-3">Leave blank to turn off reminders.</p>
         <input
           type="time"
           value={time}
           onChange={(e) => setTime(e.target.value)}
-          className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition"
+          className="rounded-xl border border-slate-600 bg-[#0f172a] px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#d4a843]/50 focus:border-transparent transition"
         />
       </div>
 
-      {/* Save */}
       <button
         onClick={save}
         disabled={status === "saving"}
-        className="w-full bg-emerald-600 text-white font-semibold py-3 rounded-xl hover:bg-emerald-700 active:scale-[0.98] disabled:opacity-50 transition-all shadow-sm text-sm"
+        className="w-full bg-[#d4a843] text-[#080d1a] font-semibold py-3 rounded-xl hover:bg-[#e0bc60] active:scale-[0.98] disabled:opacity-50 transition-all shadow-sm text-sm"
       >
         {status === "saving" ? "Saving…" : status === "saved" ? "Saved!" : status === "error" ? "Error — try again" : "Save changes"}
       </button>
 
       <div className="text-center">
-        <Link href="/dashboard" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+        <Link href="/dashboard" className="text-sm text-[#d4a843] hover:text-[#e0bc60] font-medium">
           ← Back to dashboard
         </Link>
       </div>

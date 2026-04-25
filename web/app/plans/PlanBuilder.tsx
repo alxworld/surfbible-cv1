@@ -8,6 +8,8 @@ const OSIS_CODES = Object.keys(BOOK_NAMES);
 type Passage = { book: string; ref: string };
 type Day = { passages: Passage[] };
 
+const inputCls = "border border-slate-600 bg-[#0f172a] rounded-lg px-2 py-1.5 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#d4a843]/50 transition";
+
 function emptyDay(): Day {
   return { passages: [{ book: "GEN", ref: "" }] };
 }
@@ -100,46 +102,46 @@ export default function PlanBuilder({
   return (
     <form onSubmit={submit} className="space-y-6">
       {/* Meta */}
-      <div className="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5 space-y-4">
+      <div className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-5 space-y-4">
         <div>
-          <label className="block text-xs font-medium text-stone-500 mb-1">Plan title *</label>
+          <label className="block text-xs font-medium text-slate-400 mb-1">Plan title *</label>
           <input
             required
             value={title}
             onChange={e => setTitle(e.target.value)}
             placeholder="e.g. 30 Days in the Psalms"
-            className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+            className={`w-full ${inputCls}`}
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-stone-500 mb-1">Description</label>
+          <label className="block text-xs font-medium text-slate-400 mb-1">Description</label>
           <textarea
             value={description}
             onChange={e => setDescription(e.target.value)}
             rows={2}
             placeholder="Optional description"
-            className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 resize-none"
+            className={`w-full resize-none ${inputCls}`}
           />
         </div>
         <label className="flex items-center gap-3 cursor-pointer select-none">
           <div
             onClick={() => setIsPublic(v => !v)}
-            className={`w-10 h-6 rounded-full transition-colors ${isPublic ? "bg-emerald-500" : "bg-stone-200"} relative`}
+            className={`w-10 h-6 rounded-full transition-colors ${isPublic ? "bg-[#d4a843]" : "bg-slate-600"} relative`}
           >
             <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${isPublic ? "left-5" : "left-1"}`} />
           </div>
-          <span className="text-sm text-stone-700">Make this plan public</span>
+          <span className="text-sm text-slate-300">Make this plan public</span>
         </label>
       </div>
 
       {/* Days */}
       <div className="space-y-3">
         {days.map((day, di) => (
-          <div key={di} className="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5">
+          <div key={di} className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-5">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-emerald-600 uppercase tracking-wide">Day {di + 1}</span>
+              <span className="text-xs font-bold text-[#d4a843] uppercase tracking-wide">Day {di + 1}</span>
               {days.length > 1 && (
-                <button type="button" onClick={() => removeDay(di)} className="text-xs text-red-400 hover:text-red-600">
+                <button type="button" onClick={() => removeDay(di)} className="text-xs text-red-400 hover:text-red-300">
                   Remove day
                 </button>
               )}
@@ -151,7 +153,7 @@ export default function PlanBuilder({
                   <select
                     value={p.book}
                     onChange={e => setPassage(di, pi, "book", e.target.value)}
-                    className="border border-stone-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 w-36"
+                    className={`w-36 ${inputCls}`}
                   >
                     {OSIS_CODES.map(code => (
                       <option key={code} value={code}>{BOOK_NAMES[code]}</option>
@@ -162,10 +164,10 @@ export default function PlanBuilder({
                     value={p.ref}
                     onChange={e => setPassage(di, pi, "ref", e.target.value)}
                     placeholder="e.g. 1:1-17"
-                    className="flex-1 border border-stone-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className={`flex-1 ${inputCls}`}
                   />
                   {day.passages.length > 1 && (
-                    <button type="button" onClick={() => removePassage(di, pi)} className="text-stone-300 hover:text-red-400 text-lg leading-none px-1">
+                    <button type="button" onClick={() => removePassage(di, pi)} className="text-slate-500 hover:text-red-400 text-lg leading-none px-1">
                       ×
                     </button>
                   )}
@@ -176,7 +178,7 @@ export default function PlanBuilder({
             <button
               type="button"
               onClick={() => addPassage(di)}
-              className="mt-2 text-xs text-emerald-600 hover:text-emerald-700 font-medium"
+              className="mt-2 text-xs text-[#d4a843] hover:text-[#e0bc60] font-medium"
             >
               + Add passage
             </button>
@@ -187,19 +189,19 @@ export default function PlanBuilder({
       <button
         type="button"
         onClick={addDay}
-        className="w-full border-2 border-dashed border-emerald-200 text-emerald-600 text-sm font-medium py-3 rounded-xl hover:border-emerald-400 hover:bg-emerald-50 transition-colors"
+        className="w-full border-2 border-dashed border-[#d4a843]/30 text-[#d4a843] text-sm font-medium py-3 rounded-xl hover:border-[#d4a843]/60 hover:bg-[#d4a843]/5 transition-colors"
       >
         + Add day
       </button>
 
-      {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+      {error && <p className="text-sm text-red-400 text-center">{error}</p>}
 
       <div className="flex gap-3">
         {isEdit && (
           <button
             type="button"
             onClick={deletePlan}
-            className="border border-red-200 text-red-500 text-sm font-medium px-4 py-3 rounded-xl hover:bg-red-50 transition-colors"
+            className="border border-red-500/40 text-red-400 text-sm font-medium px-4 py-3 rounded-xl hover:bg-red-500/10 transition-colors"
           >
             Delete
           </button>
@@ -207,7 +209,7 @@ export default function PlanBuilder({
         <button
           type="submit"
           disabled={busy}
-          className="flex-1 bg-emerald-600 text-white text-sm font-semibold py-3 rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-colors"
+          className="flex-1 bg-[#d4a843] text-[#080d1a] text-sm font-semibold py-3 rounded-xl hover:bg-[#e0bc60] disabled:opacity-50 transition-colors"
         >
           {busy ? "Saving..." : isEdit ? "Save changes" : `Create plan (${days.length} day${days.length !== 1 ? "s" : ""})`}
         </button>

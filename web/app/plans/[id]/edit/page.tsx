@@ -30,12 +30,12 @@ export default async function EditPlanPage({ params }: { params: Promise<{ id: s
   };
 
   return (
-    <main className="bg-green-50 min-h-[calc(100svh-3.5rem)]">
+    <main className="bg-[#0f172a] min-h-[calc(100svh-3.5rem)]">
       <div className="max-w-lg mx-auto px-4 py-8">
-        <Link href={`/plans/${id}`} className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 mb-6 font-medium">
+        <Link href={`/plans/${id}`} className="inline-flex items-center gap-1 text-sm text-[#d4a843] hover:text-[#e0bc60] mb-6 font-medium">
           ← Back to plan
         </Link>
-        <h1 className="text-2xl font-bold text-stone-900 mb-6">Edit plan</h1>
+        <h1 className="text-2xl font-bold text-slate-100 mb-6">Edit plan</h1>
         <PlanBuilder initial={initial} planId={id} />
       </div>
     </main>

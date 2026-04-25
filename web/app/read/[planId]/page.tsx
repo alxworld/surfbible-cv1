@@ -57,32 +57,32 @@ export default async function ReadPage({
     ));
 
   return (
-    <main className="bg-green-50 min-h-[calc(100svh-3.5rem)]">
+    <main className="bg-[#0f172a] min-h-[calc(100svh-3.5rem)]">
       <div className="max-w-2xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-6">
-          <Link href="/dashboard" className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 font-medium mb-3">
+          <Link href="/dashboard" className="inline-flex items-center gap-1 text-sm text-[#d4a843] hover:text-[#e0bc60] font-medium mb-3">
             ← Back to dashboard
           </Link>
-          <div className="bg-white rounded-2xl border border-emerald-100 shadow-sm px-5 py-4">
-            <h1 className="text-lg font-bold text-stone-900">{enrollment.plan.title}</h1>
-            <p className="text-stone-400 text-sm mt-0.5">Day {enrollment.currentDay}</p>
+          <div className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm px-5 py-4">
+            <h1 className="text-lg font-bold text-slate-100">{enrollment.plan.title}</h1>
+            <p className="text-slate-400 text-sm mt-0.5">Day {enrollment.currentDay}</p>
           </div>
         </div>
 
         {/* Passages */}
         <div className="space-y-5">
           {texts.map(({ label, text }, i) => (
-            <section key={i} className="bg-white rounded-2xl border border-emerald-100 shadow-sm p-6">
-              <h2 className="font-display font-bold text-lg text-stone-900 mb-4 pb-3 border-b border-emerald-50">
+            <section key={i} className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-6">
+              <h2 className="font-display font-bold text-lg text-slate-100 mb-4 pb-3 border-b border-[#d4a843]/10">
                 {label}
               </h2>
               {text ? (
-                <p className="text-[15px] leading-loose whitespace-pre-wrap text-stone-700 font-serif">
+                <p className="text-[15px] leading-loose whitespace-pre-wrap text-slate-300 font-serif">
                   {text}
                 </p>
               ) : (
-                <p className="text-sm text-stone-400 italic">Text not available.</p>
+                <p className="text-sm text-slate-400 italic">Text not available.</p>
               )}
             </section>
           ))}
@@ -100,7 +100,7 @@ export default async function ReadPage({
         <div className="mt-6">
           <Link
             href="/dashboard"
-            className="block w-full text-center bg-emerald-600 text-white py-3 rounded-xl hover:bg-emerald-700 text-sm font-semibold transition-colors shadow-sm"
+            className="block w-full text-center bg-[#d4a843] text-[#080d1a] py-3 rounded-xl hover:bg-[#e0bc60] text-sm font-semibold transition-colors shadow-sm"
           >
             Back to dashboard
           </Link>

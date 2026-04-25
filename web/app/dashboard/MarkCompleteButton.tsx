@@ -22,7 +22,7 @@ export default function MarkCompleteButton({ enrollmentId }: { enrollmentId: str
     <button
       onClick={complete}
       disabled={pending}
-      className="flex-1 bg-emerald-600 text-white py-3 rounded-xl hover:bg-emerald-700 active:scale-[0.98] disabled:opacity-50 text-sm font-semibold transition-all shadow-sm"
+      className="flex-1 bg-[#d4a843] text-[#080d1a] py-3 rounded-xl hover:bg-[#e0bc60] active:scale-[0.98] disabled:opacity-50 text-sm font-semibold transition-all shadow-sm"
     >
       {pending ? "Saving…" : "Mark complete"}
     </button>

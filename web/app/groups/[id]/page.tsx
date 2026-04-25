@@ -47,31 +47,31 @@ export default async function GroupPage({ params }: { params: Promise<{ id: stri
     (m.streakCount ?? 0) > (best.streakCount ?? 0) ? m : best, members[0]);
 
   return (
-    <main className="bg-green-50 min-h-[calc(100svh-3.5rem)]">
+    <main className="bg-[#0f172a] min-h-[calc(100svh-3.5rem)]">
       <div className="max-w-lg mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-bold text-stone-900">{group.name}</h1>
-              <p className="text-stone-500 text-sm mt-0.5">{plan?.title} · {plan?.totalDays} days</p>
+              <h1 className="text-2xl font-bold text-slate-100">{group.name}</h1>
+              <p className="text-slate-400 text-sm mt-0.5">{plan?.title} · {plan?.totalDays} days</p>
             </div>
             <LeaveButton groupId={group.id} userId={user.id} />
           </div>
         </div>
 
         {/* Invite code */}
-        <div className="bg-white border border-emerald-100 rounded-2xl p-5 shadow-sm mb-5">
-          <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide mb-2">Invite code</p>
+        <div className="bg-[#162033] border border-[#d4a843]/15 rounded-2xl p-5 shadow-sm mb-5">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Invite code</p>
           <div className="flex items-center gap-3">
             <CopyInviteButton code={group.inviteCode} />
-            <p className="text-xs text-stone-400">Share this code so others can join</p>
+            <p className="text-xs text-slate-400">Share this code so others can join</p>
           </div>
         </div>
 
         {/* Streak leader */}
         {leader && (leader.streakCount ?? 0) > 0 && (
-          <div className="bg-emerald-600 text-white rounded-2xl p-5 shadow-sm mb-5">
+          <div className="bg-gradient-to-r from-[#d4a843] to-[#b8882a] text-[#080d1a] rounded-2xl p-5 shadow-sm mb-5">
             <p className="text-xs font-semibold uppercase tracking-wide opacity-70 mb-1">Streak leader</p>
             <p className="font-bold text-lg">{leader.displayName ?? leader.email}</p>
             <p className="text-sm opacity-80">{leader.streakCount} day streak · Day {leader.currentDay ?? "—"}</p>
@@ -79,26 +79,26 @@ export default async function GroupPage({ params }: { params: Promise<{ id: stri
         )}
 
         {/* Member table */}
-        <div className="bg-white border border-emerald-100 rounded-2xl shadow-sm overflow-hidden mb-6">
-          <div className="px-5 py-3 border-b border-emerald-50">
-            <h2 className="text-xs font-semibold text-stone-400 uppercase tracking-wide">{members.length} member{members.length !== 1 ? "s" : ""}</h2>
+        <div className="bg-[#162033] border border-[#d4a843]/15 rounded-2xl shadow-sm overflow-hidden mb-6">
+          <div className="px-5 py-3 border-b border-[#d4a843]/10">
+            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wide">{members.length} member{members.length !== 1 ? "s" : ""}</h2>
           </div>
-          <ul className="divide-y divide-emerald-50">
+          <ul className="divide-y divide-[#d4a843]/8">
             {members.map(m => (
               <li key={m.userId} className="px-5 py-3.5 flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-stone-900 truncate">
+                  <p className="text-sm font-medium text-slate-100 truncate">
                     {m.displayName ?? m.email}
-                    {m.role === "admin" && <span className="ml-1.5 text-[10px] text-emerald-600 font-semibold uppercase">admin</span>}
-                    {m.userId === user.id && <span className="ml-1.5 text-[10px] text-stone-400">(you)</span>}
+                    {m.role === "admin" && <span className="ml-1.5 text-[10px] text-[#d4a843] font-semibold uppercase">admin</span>}
+                    {m.userId === user.id && <span className="ml-1.5 text-[10px] text-slate-400">(you)</span>}
                   </p>
-                  <p className="text-xs text-stone-400">
+                  <p className="text-xs text-slate-400">
                     {m.currentDay != null ? `Day ${m.currentDay}` : "Not started"}
                   </p>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="text-sm font-bold text-emerald-600">{m.streakCount ?? 0}</p>
-                  <p className="text-[10px] text-stone-400 uppercase">streak</p>
+                  <p className="text-sm font-bold text-[#d4a843]">{m.streakCount ?? 0}</p>
+                  <p className="text-[10px] text-slate-400 uppercase">streak</p>
                 </div>
               </li>
             ))}
@@ -106,7 +106,7 @@ export default async function GroupPage({ params }: { params: Promise<{ id: stri
         </div>
 
         <div className="text-center">
-          <Link href="/groups" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+          <Link href="/groups" className="text-sm text-[#d4a843] hover:text-[#e0bc60] font-medium">
             All groups →
           </Link>
         </div>

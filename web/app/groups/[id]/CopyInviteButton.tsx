@@ -13,7 +13,7 @@ export default function CopyInviteButton({ code }: { code: string }) {
   return (
     <button
       onClick={copy}
-      className="text-xs font-mono bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition-colors"
+      className="text-xs font-mono bg-[#0f172a] border border-[#d4a843]/30 text-[#d4a843] px-3 py-1.5 rounded-lg hover:border-[#d4a843]/60 transition-colors"
     >
       {copied ? "Copied!" : code}
     </button>

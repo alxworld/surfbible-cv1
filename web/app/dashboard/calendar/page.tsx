@@ -29,10 +29,10 @@ export default async function CalendarPage() {
   );
 
   return (
-    <main className="bg-green-50 min-h-[calc(100svh-3.5rem)]">
+    <main className="bg-[#0f172a] min-h-[calc(100svh-3.5rem)]">
       <div className="max-w-md mx-auto px-4 py-10">
-        <h1 className="text-2xl font-bold text-stone-900 mb-6">Reading Calendar</h1>
-        <div className="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5">
+        <h1 className="text-2xl font-bold text-slate-100 mb-6">Reading Calendar</h1>
+        <div className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-5">
           <MonthGrid completedDates={completedDates} />
         </div>
       </div>

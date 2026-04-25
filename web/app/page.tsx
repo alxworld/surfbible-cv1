@@ -14,10 +14,10 @@ export default function Home() {
 
 function Hero() {
   return (
-    <section className="relative min-h-[calc(100svh-3.5rem)] bg-[#040c07] flex flex-col items-center justify-center px-5 py-16 text-center overflow-hidden">
+    <section className="relative min-h-[calc(100svh-3.5rem)] bg-[#080d1a] flex flex-col items-center justify-center px-5 py-16 text-center overflow-hidden">
       {/* Ambient glows */}
-      <div className="absolute top-[-60px] left-1/2 -translate-x-1/2 w-[400px] h-[260px] bg-emerald-500/15 rounded-full blur-[90px] pointer-events-none" />
-      <div className="absolute bottom-10 -right-10 w-64 h-64 bg-emerald-700/12 rounded-full blur-[70px] pointer-events-none" />
+      <div className="absolute top-[-60px] left-1/2 -translate-x-1/2 w-[400px] h-[260px] bg-[#d4a843]/12 rounded-full blur-[90px] pointer-events-none" />
+      <div className="absolute bottom-10 -right-10 w-64 h-64 bg-[#d4a843]/8 rounded-full blur-[70px] pointer-events-none" />
 
       {/* Dot grid */}
       <div
@@ -27,44 +27,44 @@ function Hero() {
 
       <div className="relative z-10 flex flex-col items-center w-full max-w-sm">
         {/* Eyebrow */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 text-emerald-400 text-xs font-semibold tracking-[0.18em] uppercase mb-8">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#d4a843]/30 bg-[#d4a843]/10 text-[#d4a843] text-xs font-semibold tracking-[0.18em] uppercase mb-8">
           <CrossIcon className="w-3 h-3" />
           Church Bible Reading
         </div>
 
         {/* Headline */}
         <h1 className="font-display leading-[1.08] font-bold mb-5">
-          <span className="block text-[2.7rem] bg-gradient-to-br from-white via-green-100 to-green-300 bg-clip-text text-transparent">
+          <span className="block text-[2.7rem] bg-gradient-to-br from-white via-amber-50 to-[#d4a843] bg-clip-text text-transparent">
             Read the Word.
           </span>
-          <span className="block text-[2.7rem] bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-300 bg-clip-text text-transparent">
+          <span className="block text-[2.7rem] bg-gradient-to-r from-[#e0bc60] via-[#d4a843] to-[#e0bc60] bg-clip-text text-transparent">
             Every Day.
           </span>
         </h1>
 
-        <p className="text-green-200/70 text-base leading-relaxed mb-8 max-w-[270px]">
+        <p className="text-slate-300/80 text-base leading-relaxed mb-8 max-w-[270px]">
           Your church's daily companion for reading, reflecting, and growing in the Word.
         </p>
 
         {/* Verse card */}
-        <div className="w-full rounded-2xl border border-emerald-400/15 bg-emerald-400/[0.06] backdrop-blur-md p-4 mb-8 text-left">
+        <div className="w-full rounded-2xl border border-[#d4a843]/15 bg-[#d4a843]/[0.06] backdrop-blur-md p-4 mb-8 text-left">
           <div className="flex items-center gap-2 mb-2.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span className="text-emerald-400/80 text-[10px] font-semibold tracking-[0.15em] uppercase">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#d4a843]" />
+            <span className="text-[#d4a843]/80 text-[10px] font-semibold tracking-[0.15em] uppercase">
               Verse of the Day
             </span>
           </div>
           <p className="font-display text-white/90 text-sm leading-relaxed italic">
             "Your word is a lamp to my feet and a light to my path."
           </p>
-          <p className="text-green-400/60 text-xs mt-2 font-medium">Psalm 119:105 · ESV</p>
+          <p className="text-[#d4a843]/60 text-xs mt-2 font-medium">Psalm 119:105 · ESV</p>
         </div>
 
         {/* CTAs */}
         <div className="flex flex-col gap-3 w-full">
           <Link
             href="/sign-up"
-            className="bg-emerald-400 text-green-950 px-6 py-3.5 rounded-xl font-bold text-base text-center shadow-[0_0_28px_rgba(52,211,153,0.3)] hover:bg-emerald-300 hover:shadow-[0_0_40px_rgba(52,211,153,0.4)] active:scale-[0.98] transition-all duration-200"
+            className="bg-[#d4a843] text-[#080d1a] px-6 py-3.5 rounded-xl font-bold text-base text-center shadow-[0_0_28px_rgba(212,168,67,0.3)] hover:bg-[#e0bc60] hover:shadow-[0_0_40px_rgba(212,168,67,0.4)] active:scale-[0.98] transition-all duration-200"
           >
             Start Reading Free
           </Link>
@@ -93,16 +93,16 @@ function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div className="text-center">
       <p className="text-white font-bold text-xl leading-none">{value}</p>
-      <p className="text-green-400/60 text-xs mt-1">{label}</p>
+      <p className="text-[#d4a843]/60 text-xs mt-1">{label}</p>
     </div>
   );
 }
 
 function Features() {
   return (
-    <section className="bg-[#061009] py-20 px-5">
+    <section className="bg-[#0d1526] py-20 px-5">
       <div className="max-w-sm mx-auto">
-        <p className="text-emerald-400 text-[10px] font-bold tracking-[0.22em] uppercase text-center mb-2">
+        <p className="text-[#d4a843] text-[10px] font-bold tracking-[0.22em] uppercase text-center mb-2">
           Why SurfBible
         </p>
         <h2 className="font-display text-[1.75rem] font-bold text-white text-center mb-10 leading-tight">
@@ -110,40 +110,40 @@ function Features() {
         </h2>
 
         <div className="flex flex-col gap-3">
-          <div className="rounded-2xl border border-emerald-400/15 bg-gradient-to-br from-emerald-950/50 via-green-900/20 to-transparent p-6">
-            <div className="w-11 h-11 rounded-xl bg-emerald-400/15 flex items-center justify-center text-emerald-400 mb-4">
+          <div className="rounded-2xl border border-[#d4a843]/15 bg-gradient-to-br from-[#d4a843]/8 via-[#d4a843]/3 to-transparent p-6">
+            <div className="w-11 h-11 rounded-xl bg-[#d4a843]/15 flex items-center justify-center text-[#d4a843] mb-4">
               <BookOpenIcon className="w-5 h-5" />
             </div>
             <h3 className="font-semibold text-white text-base mb-2">Guided Reading Plans</h3>
-            <p className="text-green-200/60 text-sm leading-relaxed">
+            <p className="text-slate-300/70 text-sm leading-relaxed">
               The Navigators plan, NT-in-90, Psalms & Proverbs and more. Structured passages every day to take you through Scripture from beginning to end.
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-2xl border border-white/8 bg-white/[0.04] p-4">
-              <div className="w-9 h-9 rounded-xl bg-emerald-400/15 flex items-center justify-center text-emerald-400 mb-3">
+              <div className="w-9 h-9 rounded-xl bg-[#d4a843]/15 flex items-center justify-center text-[#d4a843] mb-3">
                 <FlameIcon className="w-5 h-5" />
               </div>
               <h3 className="font-semibold text-white text-sm mb-1.5 leading-tight">Streak Tracking</h3>
-              <p className="text-green-200/50 text-xs leading-relaxed">Daily habit with streaks and monthly freeze.</p>
+              <p className="text-slate-400/70 text-xs leading-relaxed">Daily habit with streaks and monthly freeze.</p>
             </div>
             <div className="rounded-2xl border border-white/8 bg-white/[0.04] p-4">
-              <div className="w-9 h-9 rounded-xl bg-emerald-400/15 flex items-center justify-center text-emerald-400 mb-3">
+              <div className="w-9 h-9 rounded-xl bg-[#d4a843]/15 flex items-center justify-center text-[#d4a843] mb-3">
                 <UsersIcon className="w-5 h-5" />
               </div>
               <h3 className="font-semibold text-white text-sm mb-1.5 leading-tight">Church Groups</h3>
-              <p className="text-green-200/50 text-xs leading-relaxed">Read together. See everyone's progress.</p>
+              <p className="text-slate-400/70 text-xs leading-relaxed">Read together. See everyone's progress.</p>
             </div>
           </div>
 
           <div className="rounded-2xl border border-white/8 bg-white/[0.04] p-5 flex items-center gap-4">
-            <div className="w-11 h-11 rounded-xl bg-emerald-400/15 flex items-center justify-center text-emerald-400 shrink-0">
+            <div className="w-11 h-11 rounded-xl bg-[#d4a843]/15 flex items-center justify-center text-[#d4a843] shrink-0">
               <BellIcon className="w-5 h-5" />
             </div>
             <div>
               <h3 className="font-semibold text-white text-sm mb-1">Daily Reminders</h3>
-              <p className="text-green-200/60 text-sm leading-relaxed">A gentle nudge at your preferred time.</p>
+              <p className="text-slate-300/70 text-sm leading-relaxed">A gentle nudge at your preferred time.</p>
             </div>
           </div>
         </div>
@@ -154,25 +154,25 @@ function Features() {
 
 function Plans() {
   return (
-    <section className="bg-green-50 py-16">
-      <p className="text-emerald-600 text-[10px] font-bold tracking-[0.22em] uppercase text-center mb-2 px-5">
+    <section className="bg-[#0f172a] py-16">
+      <p className="text-[#d4a843] text-[10px] font-bold tracking-[0.22em] uppercase text-center mb-2 px-5">
         Reading Plans
       </p>
-      <h2 className="font-display text-[1.75rem] font-bold text-stone-900 text-center mb-2 px-5 leading-tight">
+      <h2 className="font-display text-[1.75rem] font-bold text-slate-100 text-center mb-2 px-5 leading-tight">
         Start where you are
       </h2>
-      <p className="text-stone-400 text-sm text-center mb-8 px-5">
+      <p className="text-slate-400 text-sm text-center mb-8 px-5">
         Structured plans for every season of faith
       </p>
 
       <div className="flex gap-3.5 overflow-x-auto px-5 pb-1 snap-x snap-mandatory scrollbar-hide">
-        <PlanCard title="Navigators Plan" days={300} desc="2 NT + 2 OT passages daily. The classic whole-Bible discipleship plan." tag="Most Popular" accent="border-emerald-200 bg-white" tagCls="bg-emerald-100 text-emerald-700" dot="bg-emerald-500" />
-        <PlanCard title="NT in 90 Days"   days={90}  desc="The entire New Testament in three months. Ideal for new believers."     tag="Quick Start"  accent="border-green-200 bg-white"   tagCls="bg-green-100 text-green-700"   dot="bg-green-500"   />
-        <PlanCard title="Psalms & Proverbs" days={30} desc="Wisdom and worship in one month. A focused devotional journey."         tag="30 Days"     accent="border-teal-200 bg-white"    tagCls="bg-teal-100 text-teal-700"    dot="bg-teal-500"    />
+        <PlanCard title="Navigators Plan"   days={300} desc="2 NT + 2 OT passages daily. The classic whole-Bible discipleship plan." tag="Most Popular" tagCls="bg-[#d4a843]/15 text-[#d4a843]"   dot="bg-[#d4a843]" />
+        <PlanCard title="NT in 90 Days"     days={90}  desc="The entire New Testament in three months. Ideal for new believers."     tag="Quick Start"  tagCls="bg-[#d4a843]/10 text-[#e0bc60]"  dot="bg-[#e0bc60]" />
+        <PlanCard title="Psalms & Proverbs" days={30}  desc="Wisdom and worship in one month. A focused devotional journey."         tag="30 Days"      tagCls="bg-[#d4a843]/10 text-[#c8982e]"  dot="bg-[#c8982e]" />
       </div>
 
       <div className="text-center mt-7 px-5">
-        <Link href="/plans" className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold text-sm hover:text-emerald-700">
+        <Link href="/plans" className="inline-flex items-center gap-1.5 text-[#d4a843] font-semibold text-sm hover:text-[#e0bc60]">
           See all plans <span aria-hidden>→</span>
         </Link>
       </div>
@@ -180,41 +180,40 @@ function Plans() {
   );
 }
 
-function PlanCard({ title, days, desc, tag, accent, tagCls, dot }: {
-  title: string; days: number; desc: string; tag: string;
-  accent: string; tagCls: string; dot: string;
+function PlanCard({ title, days, desc, tag, tagCls, dot }: {
+  title: string; days: number; desc: string; tag: string; tagCls: string; dot: string;
 }) {
   return (
-    <div className={`flex-shrink-0 snap-start w-[248px] rounded-2xl border ${accent} p-5 flex flex-col gap-3.5 shadow-sm`}>
+    <div className="flex-shrink-0 snap-start w-[248px] rounded-2xl border border-[#d4a843]/20 bg-[#162033] p-5 flex flex-col gap-3.5 shadow-sm">
       <span className={`self-start text-[11px] font-bold px-2.5 py-1 rounded-full ${tagCls}`}>{tag}</span>
       <div>
-        <h3 className="font-semibold text-stone-900 text-sm leading-tight mb-1">{title}</h3>
+        <h3 className="font-semibold text-slate-100 text-sm leading-tight mb-1">{title}</h3>
         <div className="flex items-center gap-1.5">
           <div className={`w-1.5 h-1.5 rounded-full ${dot}`} />
-          <p className="text-xs text-stone-400 font-medium">{days} days</p>
+          <p className="text-xs text-slate-400 font-medium">{days} days</p>
         </div>
       </div>
-      <p className="text-stone-500 text-xs leading-relaxed flex-1">{desc}</p>
-      <Link href="/plans" className="text-emerald-600 font-semibold text-xs hover:text-emerald-700">Enroll →</Link>
+      <p className="text-slate-400 text-xs leading-relaxed flex-1">{desc}</p>
+      <Link href="/plans" className="text-[#d4a843] font-semibold text-xs hover:text-[#e0bc60]">Enroll →</Link>
     </div>
   );
 }
 
 function ScriptureBanner() {
   return (
-    <section className="relative bg-[#040c07] py-20 px-6 text-center overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_50%,rgba(52,211,153,0.08)_0%,transparent_70%)] pointer-events-none" />
+    <section className="relative bg-[#080d1a] py-20 px-6 text-center overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_50%,rgba(212,168,67,0.08)_0%,transparent_70%)] pointer-events-none" />
       <div className="relative z-10 max-w-sm mx-auto flex flex-col items-center gap-5">
-        <div className="w-10 h-10 rounded-full border border-emerald-400/25 bg-emerald-400/10 flex items-center justify-center text-emerald-400">
+        <div className="w-10 h-10 rounded-full border border-[#d4a843]/25 bg-[#d4a843]/10 flex items-center justify-center text-[#d4a843]">
           <CrossIcon className="w-4 h-4" />
         </div>
         <blockquote className="font-display text-white/90 text-xl leading-relaxed italic">
           "All Scripture is breathed out by God and profitable for teaching, for reproof, for correction, and for training in righteousness."
         </blockquote>
         <div className="flex items-center gap-3">
-          <div className="h-px w-8 bg-emerald-400/40" />
-          <cite className="not-italic text-emerald-400 text-sm font-medium tracking-wide">2 Timothy 3:16</cite>
-          <div className="h-px w-8 bg-emerald-400/40" />
+          <div className="h-px w-8 bg-[#d4a843]/40" />
+          <cite className="not-italic text-[#d4a843] text-sm font-medium tracking-wide">2 Timothy 3:16</cite>
+          <div className="h-px w-8 bg-[#d4a843]/40" />
         </div>
       </div>
     </section>
@@ -223,22 +222,22 @@ function ScriptureBanner() {
 
 function CtaSection() {
   return (
-    <section className="relative bg-[#061009] py-16 px-5 overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-40 bg-emerald-400/8 rounded-full blur-[60px] pointer-events-none" />
+    <section className="relative bg-[#0d1526] py-16 px-5 overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-40 bg-[#d4a843]/8 rounded-full blur-[60px] pointer-events-none" />
       <div className="relative z-10 max-w-sm mx-auto">
-        <div className="rounded-3xl border border-emerald-400/20 bg-gradient-to-b from-emerald-950/40 to-transparent p-8 flex flex-col items-center text-center">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-400/15 flex items-center justify-center text-emerald-400 mb-5">
+        <div className="rounded-3xl border border-[#d4a843]/20 bg-gradient-to-b from-[#d4a843]/10 to-transparent p-8 flex flex-col items-center text-center">
+          <div className="w-12 h-12 rounded-2xl bg-[#d4a843]/15 flex items-center justify-center text-[#d4a843] mb-5">
             <CrossIcon className="w-5 h-5" />
           </div>
           <h2 className="font-display text-2xl font-bold text-white mb-3 leading-tight">
             Begin your reading journey
           </h2>
-          <p className="text-green-200/60 text-sm leading-relaxed mb-7 max-w-[240px]">
+          <p className="text-slate-300/70 text-sm leading-relaxed mb-7 max-w-[240px]">
             Join your church on SurfBible and build a lasting habit in the Word. Free to start.
           </p>
           <Link
             href="/sign-up"
-            className="w-full bg-emerald-400 text-green-950 py-3.5 rounded-xl font-bold text-base text-center shadow-[0_0_28px_rgba(52,211,153,0.25)] hover:bg-emerald-300 hover:shadow-[0_0_40px_rgba(52,211,153,0.35)] active:scale-[0.98] transition-all duration-200"
+            className="w-full bg-[#d4a843] text-[#080d1a] py-3.5 rounded-xl font-bold text-base text-center shadow-[0_0_28px_rgba(212,168,67,0.25)] hover:bg-[#e0bc60] hover:shadow-[0_0_40px_rgba(212,168,67,0.35)] active:scale-[0.98] transition-all duration-200"
           >
             Get Started Free
           </Link>
