@@ -11,6 +11,8 @@ export const churches = pgTable("churches", {
   name: varchar("name", { length: 200 }).notNull(),
   city: varchar("city", { length: 100 }),
   country: varchar("country", { length: 100 }).notNull().default("India"),
+  inviteCode: varchar("invite_code", { length: 12 }).unique().notNull(),
+  createdBy: uuid("created_by"),           // set after user row exists; no FK to avoid circular dep
   createdAt: tstz("created_at").notNull().default(sql`NOW()`),
 });
 

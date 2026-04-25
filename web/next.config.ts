@@ -1,5 +1,17 @@
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === "development";
+
+// Clerk serves its JS from the instance's Frontend API subdomain
+// dev: *.clerk.accounts.dev  |  prod: *.clerk.com
+const clerkScriptSrc = isDev
+  ? "https://*.clerk.accounts.dev"
+  : "https://*.clerk.com";
+
+const clerkConnectSrc = isDev
+  ? "https://*.clerk.accounts.dev https://clerk.com"
+  : "https://*.clerk.com https://clerk.com";
+
 const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -9,17 +21,21 @@ const securityHeaders = [
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains; preload",
   },
-  // Tighten script-src once Clerk domain is confirmed; remove unsafe-inline with nonce policy pre-launch
   {
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline'",
+      // unsafe-eval needed by React in dev; Clerk JS loaded from its CDN
+      `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ${clerkScriptSrc} https://challenges.cloudflare.com`,
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: https:",
       "font-src 'self'",
-      "connect-src 'self' https://api.esv.org",
+      `connect-src 'self' https://api.esv.org ${clerkConnectSrc} https://challenges.cloudflare.com`,
+      // Clerk uses iframes for verification flows and Cloudflare Turnstile for CAPTCHA
+      `frame-src ${clerkScriptSrc} https://challenges.cloudflare.com`,
       "frame-ancestors 'none'",
+      // Clerk uses blob: workers
+      "worker-src 'self' blob:",
     ].join("; "),
   },
 ];

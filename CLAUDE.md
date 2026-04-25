@@ -42,43 +42,9 @@ Requires `DATABASE_URL` in `.env.local`.
 
 ## Next Actions
 
-### Immediate — see `docs/setup.md` for full step-by-step detail
-- [ ] Step 1 — Create Vercel project (root dir = `web`)
-- [ ] Step 2 — Provision Neon DB → `vercel env pull .env.local`
-- [ ] Step 3 — `npm run db:push` + `npm run db:seed`
-- [ ] Step 4 — Create Clerk app → add keys to `.env.local` + Vercel env vars
-- [ ] Step 5 — Get ESV API key → add `ESV_API_KEY` to `.env.local`
-- [ ] Step 6 — `npm run dev` → verify `GET /api/plans` returns plan JSON
-- [ ] Step 7 — Confirm all 6 keys are in `.env.local`
+See `next_actions.md` — living document with full phase-by-phase checklist.
 
-### Phase 1.0 — MVP (`docs/phase-1.0.md` has full detail)
-- [ ] `middleware.ts` — Clerk auth guard (public: `/`, `/plans`, `/sign-in`, `/sign-up`)
-- [ ] `app/sign-in/[[...sign-in]]/page.tsx` + `app/sign-up/[[...sign-up]]/page.tsx`
-- [ ] `lib/auth.ts` — `getDbUser()` helper (get-or-create user from Clerk session)
-- [ ] `app/api/user/plans/route.ts` — `GET` (list enrollments) + `POST` (enroll)
-- [ ] `app/api/user/plans/[id]/complete/route.ts` — mark day done + update streak
-- [ ] `lib/streak.ts` — pure streak calculation (grace window, freeze logic)
-- [ ] `lib/osis.ts` — OSIS code → full book name (GEN → Genesis, etc.)
-- [ ] `lib/bible.ts` — ESV API fetch, cached 24h via `next: { revalidate: 86400 }`
-- [ ] `app/plans/page.tsx` — plan browser (Server Component)
-- [ ] `app/dashboard/page.tsx` — today's reading card + streak badge
-- [ ] `app/read/[planId]/page.tsx` — passage reader + notes + mark complete
-
-### Phase 1.1 — Calendar & Reminders
-- [ ] `app/dashboard/calendar/page.tsx` — monthly grid
-- [ ] `app/dashboard/stats/page.tsx` — 66-book grid, streak chart
-- [ ] `app/api/crons/reminder/route.ts` — daily reminder (Vercel Cron, hourly)
-- [ ] `app/api/crons/streak-alert/route.ts` — streak-at-risk (21:00 per user tz)
-- [ ] `app/api/crons/weekly/route.ts` — weekly summary (Sunday 08:00 per user tz)
-
-### Phase 1.2 — Recovery & Pause
-- [ ] Missed-day recovery UI (catch up / skip / restart)
-- [ ] `PUT /api/user/plans/[id]` — pause / resume / abandon
-- [ ] `POST /api/user/plans/[id]/freeze` — apply streak freeze
-- [ ] Cron: auto-freeze missed day, reset freeze on 1st of month
-
-### Phase 1.3+ — Custom Plans, Groups, Mobile
-See `../CLAUDE.md` → Next Actions for phases 1.3–2.0.
+Phases 0 through 1.2 are complete. Active work starts at Phase 1.3.
 
 ## Reading Plans
 
