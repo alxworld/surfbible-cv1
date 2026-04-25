@@ -4,10 +4,11 @@ import { users, plans, userPlans, userDayProgress, notifications } from "@/lib/d
 import { eq, and, gte } from "drizzle-orm";
 import { sendEmail, unsubscribeUrl } from "@/lib/email";
 import { weeklySummaryEmail } from "@/lib/emails/templates";
+import { isCronAuthorized } from "@/lib/cron-auth";
 
 // Runs hourly on Sundays. Sends a weekly summary to users for whom it is 08:00 local.
 export async function GET(req: Request) {
-  if (req.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!isCronAuthorized(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -45,6 +46,14 @@ export async function GET(req: Request) {
       .select({ dayNumber: userDayProgress.dayNumber })
       .from(userDayProgress)
       .where(and(eq(userDayProgress.userPlanId, row.id), gte(userDayProgress.completedAt, sevenDaysAgo)));
+
+    const todayStart = new Date(nowUtc);
+    todayStart.setUTCHours(0, 0, 0, 0);
+    const [alreadySent] = await db
+      .select({ id: notifications.id })
+      .from(notifications)
+      .where(and(eq(notifications.userId, row.userId), eq(notifications.type, "weekly_summary"), eq(notifications.status, "sent"), gte(notifications.scheduledAt, todayStart)));
+    if (alreadySent) continue;
 
     let status = "sent";
     try {

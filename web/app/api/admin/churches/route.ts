@@ -25,6 +25,8 @@ export async function POST(req: Request) {
 
   const { name, city, country } = await req.json();
   if (!name) return NextResponse.json({ error: "name required" }, { status: 400 });
+  if (name.length > 200) return NextResponse.json({ error: "name too long (max 200)" }, { status: 400 });
+  if (city && city.length > 100) return NextResponse.json({ error: "city too long (max 100)" }, { status: 400 });
 
   const inviteCode = randomBytes(6).toString("hex");
 

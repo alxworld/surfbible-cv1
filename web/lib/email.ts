@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { createHmac } from "crypto";
+import { createHmac, timingSafeEqual } from "crypto";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -16,9 +16,11 @@ export async function sendEmail(to: string, subject: string, html: string) {
 
 export function makeUnsubscribeToken(userId: string): string {
   const payload = `${userId}:${Date.now()}`;
-  const sig = createHmac("sha256", process.env.CRON_SECRET!).update(payload).digest("hex");
+  const sig = createHmac("sha256", process.env.UNSUBSCRIBE_SECRET!).update(payload).digest("hex");
   return Buffer.from(`${payload}.${sig}`).toString("base64url");
 }
+
+const TOKEN_MAX_AGE_MS = 90 * 24 * 60 * 60 * 1000; // 90 days
 
 export function verifyUnsubscribeToken(token: string): string | null {
   try {
@@ -26,9 +28,10 @@ export function verifyUnsubscribeToken(token: string): string | null {
     const lastDot = decoded.lastIndexOf(".");
     const payload = decoded.slice(0, lastDot);
     const sig = decoded.slice(lastDot + 1);
-    const expected = createHmac("sha256", process.env.CRON_SECRET!).update(payload).digest("hex");
-    if (sig !== expected) return null;
-    const [userId] = payload.split(":");
+    const expected = createHmac("sha256", process.env.UNSUBSCRIBE_SECRET!).update(payload).digest("hex");
+    if (!timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
+    const [userId, tsStr] = payload.split(":");
+    if (Date.now() - Number(tsStr) > TOKEN_MAX_AGE_MS) return null;
     return userId;
   } catch {
     return null;

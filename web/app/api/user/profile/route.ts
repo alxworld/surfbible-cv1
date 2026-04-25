@@ -11,6 +11,10 @@ export async function PUT(req: NextRequest) {
   const body = await req.json();
   const { displayName, timezone, reminderTime } = body;
 
+  if (displayName !== undefined && displayName !== null && displayName.length > 100) {
+    return NextResponse.json({ error: "displayName too long (max 100)" }, { status: 400 });
+  }
+
   const validTimezones = Intl.supportedValuesOf("timeZone");
   if (timezone && !validTimezones.includes(timezone)) {
     return NextResponse.json({ error: "Invalid timezone" }, { status: 400 });

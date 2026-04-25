@@ -3,7 +3,7 @@
 Living document. Update checkboxes as steps are completed.
 
 **Last updated:** 2026-04-25  
-**Status:** Phases 0–1.9 complete. Active work starts at Phase 2.0.
+**Status:** Phases 0–1.9 complete + Security hardening complete. Active work starts at Phase 2.0.
 
 ---
 
@@ -22,6 +22,7 @@ Living document. Update checkboxes as steps are completed.
 | 1.7 | Church admin | Complete |
 | 1.8 | Notes & Reflections | Complete |
 | 1.9 | Email delivery (Resend) | Complete |
+| 1.10 | Security hardening | Complete |
 | 2.0 | PWA & Offline reading | Not started |
 
 **Total routes:** 41 (verified clean build 2026-04-25)  
@@ -272,6 +273,30 @@ The cron routes already exist and queue `notifications` rows. This phase wires u
 - Resend free tier: 3,000 emails/month — sufficient for early users
 - `@react-email/components` for HTML templating
 - Unsubscribe token should be signed with `CRON_SECRET` or a dedicated `JWT_SECRET`
+
+---
+
+## Phase 1.10 — Security Hardening
+
+- [x] `lib/emails/templates.ts` — HTML-escape `displayName` in all three email templates (`esc()` helper)
+- [x] `app/api/plans/[id]/route.ts` — auth + visibility check on `GET /api/plans/:id` (private plans now require auth + ownership/church membership)
+- [x] `lib/email.ts` — unsubscribe tokens expire after 90 days; use separate `UNSUBSCRIBE_SECRET`; timing-safe HMAC comparison
+- [x] `lib/csp.ts` + `proxy.ts` — nonce-based CSP replacing static `unsafe-inline`; `strict-dynamic` in production; nonce passed to ClerkProvider via layout
+- [x] `next.config.ts` — CSP moved to middleware; static headers retain HSTS, X-Frame-Options, etc.; extended Permissions-Policy
+- [x] `lib/cron-auth.ts` — timing-safe `isCronAuthorized()` used in all 5 cron routes
+- [x] `app/api/user/profile/route.ts` — `displayName` max 100 chars
+- [x] `app/api/user/plans/[id]/progress/[day]/route.ts` — `notes`/`reflection` max 10,000 chars
+- [x] `app/api/groups/route.ts` — group `name` max 200 chars
+- [x] `app/api/admin/churches/route.ts` — church `name` max 200, `city` max 100
+- [x] `app/api/plans/route.ts` + `app/api/plans/[id]/route.ts` + `app/api/admin/churches/[id]/plans/route.ts` — `title` max 200, `description` max 2000
+- [x] `lib/plans/validate.ts` — `validateDays()` validates passage structure before DB insert; used in all three plan-creation routes
+- [x] `app/api/crons/reminder/route.ts` + `streak-alert/route.ts` + `weekly/route.ts` — dedup guard: skip send if notification already sent today
+- [x] `app/api/plans/route.ts` — user-created plans always private (`isPublic` input ignored)
+- [x] `.env.local` — `UNSUBSCRIBE_SECRET` generated (separate from `CRON_SECRET`)
+
+### Remaining (low priority)
+- [ ] Rate limiting on invite-code endpoints (`/api/user/church`, `/api/groups/join`) — needs Upstash Redis or Vercel rate limiting
+- [ ] Vercel cron config — restrict cron invocations to Vercel's internal network
 
 ---
 

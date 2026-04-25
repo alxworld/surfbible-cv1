@@ -3,11 +3,12 @@ import { db } from "@/lib/db";
 import { users, userPlans, streakFreezes } from "@/lib/db/schema";
 import { eq, and, isNotNull } from "drizzle-orm";
 import { hasMissedDay } from "@/lib/streak";
+import { isCronAuthorized } from "@/lib/cron-auth";
 
 // Runs hourly. At 03:xx local time, auto-applies a streak freeze for users who
 // missed yesterday and still have their monthly freeze available.
 export async function GET(req: Request) {
-  if (req.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!isCronAuthorized(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

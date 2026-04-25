@@ -128,3 +128,53 @@ All DNS changes go to your registrar for `surfbible.in`. You will need to add:
 - **From Vercel** (Step 3): A record for `@` + CNAME for `www`
 
 The exact values come from the respective dashboards — do not use placeholder values from this doc.
+
+---
+
+## Adding Google Sign-In
+
+### Development (localhost)
+
+No Google Cloud setup needed. Clerk provides shared OAuth credentials for local testing.
+
+1. Go to [dashboard.clerk.com](https://dashboard.clerk.com) → your app
+2. **User & Authentication → Social Connections**
+3. Toggle **Google** on
+4. Leave the credentials fields empty (Clerk fills them automatically for dev)
+5. Save — the Google button appears on your sign-in/sign-up pages immediately
+
+### Production (surfbible.in)
+
+Clerk's shared dev credentials do not work on production instances. You need your own Google OAuth app.
+
+**Step 1 — Create a Google OAuth app**
+
+1. Go to [console.cloud.google.com](https://console.cloud.google.com)
+2. Select or create a project (e.g. "SurfBible")
+3. **APIs & Services → OAuth consent screen**
+   - User type: **External**
+   - Fill in app name (`SurfBible`), support email, and developer contact email
+   - Scopes: add `email` and `profile` (the defaults)
+   - Save and continue through to the end
+4. **APIs & Services → Credentials → Create Credentials → OAuth 2.0 Client ID**
+   - Application type: **Web application**
+   - Name: e.g. `SurfBible Clerk`
+   - Under **Authorized redirect URIs**, add the callback URL shown in your Clerk Dashboard
+     (Clerk → Google settings → copy the URI — looks like `https://accounts.surfbible.in/v1/oauth_callback`)
+   - Click **Create**
+5. Copy the **Client ID** and **Client Secret**
+
+**Step 2 — Add credentials to Clerk**
+
+1. Clerk Dashboard → **User & Authentication → Social Connections → Google**
+2. Toggle Google on (if not already)
+3. Paste the **Client ID** and **Client Secret** from step above
+4. Save
+
+**Step 3 — Verify**
+
+1. Open [https://surfbible.in/sign-in](https://surfbible.in/sign-in)
+2. A **Continue with Google** button should appear
+3. Complete a test sign-in — you should land on the dashboard
+
+> No code changes are required. The `<SignIn>` and `<SignUp>` Clerk components automatically render all enabled social providers.

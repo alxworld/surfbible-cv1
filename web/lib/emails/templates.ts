@@ -1,3 +1,7 @@
+function esc(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
 const BASE_STYLE = `
   font-family: Georgia, serif;
   background: #f9f7f4;
@@ -38,7 +42,7 @@ function wrap(body: string, unsubLink: string): string {
 }
 
 export function reminderEmail(displayName: string | null, unsubLink: string): string {
-  const name = displayName ?? "friend";
+  const name = esc(displayName ?? "friend");
   return wrap(`
     <p style="font-size:17px;color:#1a1a1a;margin:0 0 16px;">Hi ${name},</p>
     <p style="font-size:15px;color:#333;line-height:1.6;margin:0 0 24px;">
@@ -57,7 +61,7 @@ export function streakAlertEmail(
   streakCount: number,
   unsubLink: string,
 ): string {
-  const name = displayName ?? "friend";
+  const name = esc(displayName ?? "friend");
   return wrap(`
     <p style="font-size:17px;color:#1a1a1a;margin:0 0 16px;">Hi ${name},</p>
     <p style="font-size:15px;color:#333;line-height:1.6;margin:0 0 8px;">
@@ -82,7 +86,7 @@ export function weeklySummaryEmail(
   streakCount: number,
   unsubLink: string,
 ): string {
-  const name = displayName ?? "friend";
+  const name = esc(displayName ?? "friend");
   const pct = Math.round((currentDay / totalDays) * 100);
   return wrap(`
     <p style="font-size:17px;color:#1a1a1a;margin:0 0 16px;">Hi ${name},</p>

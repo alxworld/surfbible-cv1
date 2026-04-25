@@ -32,6 +32,7 @@ export async function POST(req: Request) {
 
   const { name, planId } = await req.json();
   if (!name || !planId) return NextResponse.json({ error: "name and planId required" }, { status: 400 });
+  if (name.length > 200) return NextResponse.json({ error: "name too long (max 200)" }, { status: 400 });
 
   const [plan] = await db.select().from(plans).where(eq(plans.id, planId));
   if (!plan) return NextResponse.json({ error: "Plan not found" }, { status: 404 });

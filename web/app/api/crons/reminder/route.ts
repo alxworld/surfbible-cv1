@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { users, userPlans, notifications } from "@/lib/db/schema";
-import { eq, and, isNotNull } from "drizzle-orm";
+import { eq, and, isNotNull, gte } from "drizzle-orm";
 import { sendEmail, unsubscribeUrl } from "@/lib/email";
 import { reminderEmail } from "@/lib/emails/templates";
+import { isCronAuthorized } from "@/lib/cron-auth";
 
 // Runs hourly. Sends a reminder to users whose reminderTime falls in this UTC hour.
 export async function GET(req: Request) {
-  if (req.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!isCronAuthorized(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -35,6 +36,14 @@ export async function GET(req: Request) {
     );
     const reminderHour = Number(user.reminderTime.split(":")[0]);
     if (localHour !== reminderHour) continue;
+
+    const todayStart = new Date(nowUtc);
+    todayStart.setUTCHours(0, 0, 0, 0);
+    const [alreadySent] = await db
+      .select({ id: notifications.id })
+      .from(notifications)
+      .where(and(eq(notifications.userId, user.id), eq(notifications.type, "daily_reminder"), eq(notifications.status, "sent"), gte(notifications.scheduledAt, todayStart)));
+    if (alreadySent) continue;
 
     let status = "sent";
     try {

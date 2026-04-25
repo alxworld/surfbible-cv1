@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { plans, planDays } from "@/lib/db/schema";
 import { getDbUser } from "@/lib/auth";
 import { eq, or, and } from "drizzle-orm";
+import { validateDays } from "@/lib/plans/validate";
 
 export async function GET(req: NextRequest) {
   const type = req.nextUrl.searchParams.get("type");
@@ -28,19 +29,19 @@ export async function POST(req: Request) {
   if (!title || !Array.isArray(days) || days.length === 0) {
     return NextResponse.json({ error: "title and at least one day required" }, { status: 400 });
   }
+  if (title.length > 200) return NextResponse.json({ error: "title too long (max 200)" }, { status: 400 });
+  if (description && description.length > 2000) return NextResponse.json({ error: "description too long (max 2000)" }, { status: 400 });
 
-  for (const d of days) {
-    if (!Array.isArray(d.passages) || d.passages.length === 0) {
-      return NextResponse.json({ error: `Day ${d.dayNumber} must have at least one passage` }, { status: 400 });
-    }
-  }
+  const dayErr = validateDays(days);
+  if (dayErr) return NextResponse.json({ error: dayErr }, { status: 400 });
 
+  // User-created plans are always private — public plans are seeded by admins only.
   const [plan] = await db.insert(plans).values({
     title,
     description: description ?? null,
     type: "topical",
     totalDays: days.length,
-    isPublic: isPublic ?? false,
+    isPublic: false,
     createdBy: user.id,
   }).returning();
 

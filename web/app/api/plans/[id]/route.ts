@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { plans, planDays, userPlans } from "@/lib/db/schema";
 import { getDbUser } from "@/lib/auth";
 import { eq, and, ne } from "drizzle-orm";
+import { validateDays } from "@/lib/plans/validate";
 
 export async function GET(
   _req: Request,
@@ -12,6 +13,16 @@ export async function GET(
 
   const [plan] = await db.select().from(plans).where(eq(plans.id, id));
   if (!plan) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  if (!plan.isPublic) {
+    const user = await getDbUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const isOwner = plan.createdBy === user.id;
+    const isChurchMember = plan.churchId !== null && user.churchId === plan.churchId;
+    if (!isOwner && !isChurchMember) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+  }
 
   const days = await db
     .select()
@@ -45,6 +56,13 @@ export async function PUT(
   }
 
   const { title, description, isPublic, days } = await req.json();
+
+  if (title !== undefined && title.length > 200) return NextResponse.json({ error: "title too long (max 200)" }, { status: 400 });
+  if (description !== undefined && description !== null && description.length > 2000) return NextResponse.json({ error: "description too long (max 2000)" }, { status: 400 });
+  if (days !== undefined) {
+    const dayErr = validateDays(days);
+    if (dayErr) return NextResponse.json({ error: dayErr }, { status: 400 });
+  }
 
   const [updated] = await db
     .update(plans)

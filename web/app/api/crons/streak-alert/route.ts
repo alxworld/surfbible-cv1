@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { users, userPlans, notifications } from "@/lib/db/schema";
-import { eq, and, isNotNull } from "drizzle-orm";
+import { eq, and, isNotNull, gte } from "drizzle-orm";
 import { sendEmail, unsubscribeUrl } from "@/lib/email";
 import { streakAlertEmail } from "@/lib/emails/templates";
+import { isCronAuthorized } from "@/lib/cron-auth";
 
 // Runs hourly. At 21:00 local, alerts users with an active streak who haven't read today.
 export async function GET(req: Request) {
-  if (req.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!isCronAuthorized(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -42,6 +43,14 @@ export async function GET(req: Request) {
       ? new Date(row.lastReadAt).toLocaleDateString("en-CA", { timeZone: row.timezone })
       : null;
     if (lastReadLocal === localToday) continue;
+
+    const todayStart = new Date(nowUtc);
+    todayStart.setUTCHours(0, 0, 0, 0);
+    const [alreadySent] = await db
+      .select({ id: notifications.id })
+      .from(notifications)
+      .where(and(eq(notifications.userId, row.userId), eq(notifications.type, "streak_alert"), eq(notifications.status, "sent"), gte(notifications.scheduledAt, todayStart)));
+    if (alreadySent) continue;
 
     let status = "sent";
     try {

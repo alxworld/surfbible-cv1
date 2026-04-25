@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { churches, users, plans, planDays, userPlans } from "@/lib/db/schema";
 import { getDbUser } from "@/lib/auth";
 import { eq } from "drizzle-orm";
+import { validateDays } from "@/lib/plans/validate";
 
 export async function POST(
   req: Request,
@@ -20,6 +21,10 @@ export async function POST(
   if (!title || !Array.isArray(days) || days.length === 0) {
     return NextResponse.json({ error: "title and days required" }, { status: 400 });
   }
+  if (title.length > 200) return NextResponse.json({ error: "title too long (max 200)" }, { status: 400 });
+  if (description && description.length > 2000) return NextResponse.json({ error: "description too long (max 2000)" }, { status: 400 });
+  const dayErr = validateDays(days);
+  if (dayErr) return NextResponse.json({ error: dayErr }, { status: 400 });
 
   const [plan] = await db.insert(plans).values({
     title,

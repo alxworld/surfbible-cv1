@@ -23,6 +23,13 @@ export async function PATCH(
 
   const { notes, reflection } = await req.json();
 
+  if (notes !== undefined && notes !== null && notes.length > 10000) {
+    return NextResponse.json({ error: "notes too long (max 10000)" }, { status: 400 });
+  }
+  if (reflection !== undefined && reflection !== null && reflection.length > 10000) {
+    return NextResponse.json({ error: "reflection too long (max 10000)" }, { status: 400 });
+  }
+
   // ensure a progress row exists first
   await db
     .insert(userDayProgress)

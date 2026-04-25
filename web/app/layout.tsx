@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Lora } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { headers } from "next/headers";
 import Nav from "./components/Nav";
 import "./globals.css";
 
@@ -13,16 +14,18 @@ export const metadata: Metadata = {
   description: "Your church's daily companion for reading and growing in the Word.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${lora.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#0f172a]">
-        <ClerkProvider>
+        <ClerkProvider nonce={nonce}>
           <Nav />
           {children}
         </ClerkProvider>
