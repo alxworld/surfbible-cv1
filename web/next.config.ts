@@ -2,15 +2,14 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === "development";
 
-// Clerk serves its JS from the instance's Frontend API subdomain
-// dev: *.clerk.accounts.dev  |  prod: *.clerk.com
-const clerkScriptSrc = isDev
-  ? "https://*.clerk.accounts.dev"
-  : "https://*.clerk.com";
+// In production, Clerk JS is served from the custom clerk subdomain (clerk.<appHost>).
+// In dev, it comes from *.clerk.accounts.dev.
+const appHost = new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://surfbible.in").hostname;
+const clerkOrigin = isDev ? "https://*.clerk.accounts.dev" : `https://clerk.${appHost}`;
+const clerkAccountsOrigin = isDev ? "https://*.clerk.accounts.dev" : `https://accounts.${appHost}`;
 
-const clerkConnectSrc = isDev
-  ? "https://*.clerk.accounts.dev https://clerk.com"
-  : "https://*.clerk.com https://clerk.com";
+const clerkScriptSrc = `${clerkOrigin} https://*.clerk.com`;
+const clerkConnectSrc = `${clerkOrigin} ${clerkAccountsOrigin} https://clerk.com https://*.clerk.com`;
 
 const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
