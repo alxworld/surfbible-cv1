@@ -3,8 +3,11 @@ const isDev = process.env.NODE_ENV === "development";
 const appHost = new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://surfbible.in").hostname;
 const clerkOrigin = isDev ? "https://*.clerk.accounts.dev" : `https://clerk.${appHost}`;
 const clerkAccountsOrigin = isDev ? "https://*.clerk.accounts.dev" : `https://accounts.${appHost}`;
-const clerkScriptSrc = `${clerkOrigin} https://*.clerk.com`;
-const clerkConnectSrc = `${clerkOrigin} ${clerkAccountsOrigin} https://clerk.com https://*.clerk.com`;
+// Always include the app's own Clerk subdomain — Clerk loads chunks from
+// clerk.<appHost> even in local dev when the Frontend API proxy is configured.
+const clerkAppSubdomain = `https://clerk.${appHost}`;
+const clerkScriptSrc = `${clerkOrigin} ${clerkAppSubdomain} https://*.clerk.com`;
+const clerkConnectSrc = `${clerkOrigin} ${clerkAccountsOrigin} ${clerkAppSubdomain} https://clerk.com https://*.clerk.com`;
 
 export function buildCsp(nonce: string): string {
   const scriptSrc = isDev

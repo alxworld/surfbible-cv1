@@ -314,6 +314,47 @@ Rule: a user may have only one `active` plan at a time. Paused plans are preserv
 
 ---
 
+## Phase 1.12 — SEO
+
+Goal: surfbible.in indexed correctly by Google; public plan pages appear in search results; social sharing shows rich previews.
+
+Full action plan: `seo_actions.md`
+
+### Indexability & Metadata (done)
+- [x] `app/robots.ts` — allows `/` and `/plans`, disallows all app/auth routes; references sitemap
+- [x] `app/sitemap.ts` — dynamic sitemap: homepage, plans listing, all public plan detail pages
+- [x] `app/layout.tsx` — full global metadata: `metadataBase`, title template, description, keywords, OG tags, Twitter card
+- [x] `app/page.tsx` — homepage-specific title/description/OG override + canonical URL
+- [x] `app/plans/page.tsx` — plans listing metadata + canonical URL
+- [x] `app/plans/[id]/page.tsx` — `generateMetadata` pulls plan title/description from DB; noindex for private plans; canonical URL
+- [x] `app/dashboard/page.tsx`, `app/settings/page.tsx`, `app/admin/page.tsx`, `app/groups/page.tsx`, `app/read/[planId]/page.tsx`, `app/sign-in/...`, `app/sign-up/...` — `noindex, nofollow` on all private/auth pages
+- [x] `proxy.ts` — added `/robots.txt` and `/sitemap.xml` to public matcher (middleware was blocking them)
+
+### Done — Global OG image (fallback)
+- [x] `app/opengraph-image.tsx` — 1200×630 programmatic fallback via `ImageResponse` (dark bg + gold cross + headline + stats)
+
+### Done — Icons (programmatic)
+- [x] `app/icon.tsx` — 32×32 favicon via `ImageResponse` (dark bg + gold cross)
+- [x] `app/apple-icon.tsx` — 180×180 iOS icon via `ImageResponse` (dark bg + cross + wordmark)
+
+### Done — Structured data (JSON-LD)
+- [x] `app/page.tsx` — `WebApplication` JSON-LD schema (name, url, description, offers: free)
+- [x] `app/plans/[id]/page.tsx` — `Course` JSON-LD schema (name, description, provider: SurfBible, numberOfCredits: totalDays)
+
+### Done — Dynamic OG image per plan
+- [x] `app/plans/[id]/opengraph-image.tsx` — Next.js `ImageResponse`: unique card per plan (title + totalDays on dark background)
+
+### Pending — Submit to search engines
+- [ ] Google Search Console — add property → `https://surfbible.in` → verify via DNS TXT → submit `sitemap.xml`
+- [ ] Bing Webmaster Tools — import from GSC in one click after GSC is set up
+
+### Phase 1.12 Notes
+- Next.js App Router auto-serves `robots.txt` and `sitemap.xml` from the `app/` route files — no `public/` files needed
+- `metadataBase` in `layout.tsx` ensures relative og:image URLs resolve correctly on Vercel preview deployments
+- Placing `icon.png` / `apple-icon.png` / `opengraph-image.png` directly in `app/` is all that's needed — Next.js auto-detects these filenames and generates the correct `<link>` tags
+
+---
+
 ## Phase 2.0 — PWA & Offline Reading
 
 Goal: users can install SurfBible on their phone homescreen and read cached passages offline.

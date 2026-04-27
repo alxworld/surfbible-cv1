@@ -12,9 +12,24 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://surfbible.in" },
 };
 
+const webAppJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "SurfBible",
+  url: "https://surfbible.in",
+  description: "Daily Bible reading plans for churches and individuals.",
+  applicationCategory: "LifestyleApplication",
+  operatingSystem: "Web, iOS, Android",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+};
+
 export default function Home() {
   return (
     <main className="flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
+      />
       <Hero />
       <Features />
       <Plans />

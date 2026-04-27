@@ -88,6 +88,22 @@ export default async function PlanDetailPage({
           <EnrollButton planId={plan.id} />
         </div>
 
+        {/* Structured data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Course",
+              name: plan.title,
+              description: plan.description ?? "",
+              provider: { "@type": "Organization", name: "SurfBible", url: "https://surfbible.in" },
+              url: `https://surfbible.in/plans/${plan.id}`,
+              numberOfCredits: plan.totalDays,
+            }),
+          }}
+        />
+
         {/* Day preview */}
         <div className="bg-[#162033] rounded-2xl border border-[#d4a843]/15 shadow-sm p-5">
           <h2 className="text-sm font-semibold text-slate-400 mb-4 uppercase tracking-wide">

@@ -12,6 +12,10 @@ const isPublic = createRouteMatcher([
   "/api/unsubscribe(.*)",
   "/robots.txt",
   "/sitemap.xml",
+  "/opengraph-image.png",
+  "/plans/:id/opengraph-image.png",
+  "/icon",
+  "/apple-icon",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
@@ -35,5 +39,8 @@ export const config = {
   matcher: [
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     "/(api|trpc)(.*)",
+    // Next.js ImageResponse routes — dynamic .png served by .tsx, not static files
+    "/opengraph-image.png",
+    "/plans/:id/opengraph-image.png",
   ],
 };

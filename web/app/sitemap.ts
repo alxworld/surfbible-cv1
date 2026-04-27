@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { db } from "@/lib/db";
 import { plans } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and, ne } from "drizzle-orm";
 
 const BASE = "https://surfbible.in";
 
@@ -9,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const publicPlans = await db
     .select({ id: plans.id, updatedAt: plans.updatedAt })
     .from(plans)
-    .where(eq(plans.isPublic, true));
+    .where(and(eq(plans.isPublic, true), ne(plans.type, "topical")));
 
   return [
     { url: BASE,             lastModified: new Date(), changeFrequency: "weekly",  priority: 1.0 },
