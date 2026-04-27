@@ -24,13 +24,11 @@ export const metadata: Metadata = {
     url: "https://surfbible.in",
     title: "SurfBible — Daily Bible Reading",
     description: "Structured daily Bible reading plans for churches and individuals.",
-    images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "SurfBible" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "SurfBible — Daily Bible Reading",
     description: "Structured daily Bible reading plans for churches and individuals.",
-    images: ["/opengraph-image.png"],
   },
   robots: { index: true, follow: true },
   alternates: { canonical: "https://surfbible.in" },
