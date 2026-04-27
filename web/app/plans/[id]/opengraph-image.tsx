@@ -21,29 +21,34 @@ export default async function OgImage({ params }: { params: Promise<{ id: string
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
-        padding: "80px",
-        fontFamily: "Georgia, serif",
+        justifyContent: "space-between",
+        padding: "72px 80px",
       }}
     >
-      <div style={{ color: "#d4a843", fontSize: 26, marginBottom: 32, display: "flex", alignItems: "center", gap: 10 }}>
-        ✝ SurfBible
+      {/* Brand */}
+      <div style={{ color: "#d4a843", fontSize: 26, fontWeight: "bold" }}>
+        + SurfBible
       </div>
-      <div
-        style={{
-          color: "#ffffff",
-          fontSize: 72,
-          fontWeight: "bold",
-          lineHeight: 1.05,
-          marginBottom: 28,
-          maxWidth: 900,
-        }}
-      >
-        {title}
+
+      {/* Plan title */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div
+          style={{
+            color: "#ffffff",
+            fontSize: 72,
+            fontWeight: "bold",
+            lineHeight: 1.05,
+          }}
+        >
+          {title}
+        </div>
+        <div style={{ color: "#d4a843", fontSize: 32 }}>
+          {days} days
+        </div>
       </div>
-      <div style={{ color: "#94a3b8", fontSize: 32 }}>
-        {days} days · surfbible.in
-      </div>
+
+      {/* Footer */}
+      <div style={{ color: "#94a3b8", fontSize: 24 }}>surfbible.in</div>
     </div>,
     { ...size }
   );
