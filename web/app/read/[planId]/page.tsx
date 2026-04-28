@@ -10,6 +10,7 @@ import { fetchPassageText } from "@/lib/bible";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import NotesEditor from "./NotesEditor";
+import OfflineBanner from "./OfflineBanner";
 
 export default async function ReadPage({
   params,
@@ -61,6 +62,7 @@ export default async function ReadPage({
 
   return (
     <main className="bg-[#0f172a] min-h-[calc(100svh-3.5rem)]">
+      <OfflineBanner />
       <div className="max-w-2xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-6">

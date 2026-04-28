@@ -19,6 +19,14 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      // Next.js serves ImageResponse routes without extension (/opengraph-image),
+      // but social crawlers and browsers often request the .png URL.
+      { source: "/opengraph-image.png", destination: "/opengraph-image" },
+      { source: "/plans/:id/opengraph-image.png", destination: "/plans/:id/opengraph-image" },
+    ];
+  },
 };
 
 export default nextConfig;

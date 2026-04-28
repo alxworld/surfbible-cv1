@@ -15,6 +15,7 @@ const isPublic = createRouteMatcher([
   "/opengraph-image",
   "/icon",
   "/apple-icon",
+  "/api/pwa(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

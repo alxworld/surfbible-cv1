@@ -2,8 +2,8 @@
 
 Living document. Update checkboxes as steps are completed.
 
-**Last updated:** 2026-04-25  
-**Status:** Phases 0–1.11 complete + SEO Phase 1 complete. Active work: Phase 1.12 SEO remaining items.
+**Last updated:** 2026-04-28  
+**Status:** Phases 0–2.0 complete. No active phase.
 
 ---
 
@@ -24,10 +24,10 @@ Living document. Update checkboxes as steps are completed.
 | 1.9 | Email delivery (Resend) | Complete |
 | 1.10 | Security hardening | Complete |
 | 1.11 | One-active-plan enforcement | Complete |
-| 1.12 | SEO — indexability + metadata | Partial (code done, design pending) |
-| 2.0 | PWA & Offline reading | Not started |
+| 1.12 | SEO — indexability + metadata | Complete |
+| 2.0 | PWA & Offline reading | Complete |
 
-**Total routes:** 41 (verified clean build 2026-04-25)  
+**Total routes:** 47 (verified clean build 2026-04-28)  
 **TypeScript errors:** 0  
 **Test report:** `test_reports.md` — 31 automated HTTP tests, all pass
 
@@ -331,7 +331,8 @@ Full action plan: `seo_actions.md`
 - [x] `proxy.ts` — added `/robots.txt` and `/sitemap.xml` to public matcher (middleware was blocking them)
 
 ### Done — Global OG image (fallback)
-- [x] `app/opengraph-image.tsx` — 1200×630 programmatic fallback via `ImageResponse` (dark bg + gold cross + headline + stats)
+- [x] `app/opengraph-image.tsx` — 1200×630 programmatic fallback via `ImageResponse` (dark bg, gold headline, stats row)
+- [x] `export const dynamic = "force-dynamic"` — prevents silent build-time failures; errors surface as 500 not 404
 
 ### Done — Icons (programmatic)
 - [x] `app/icon.tsx` — 32×32 favicon via `ImageResponse` (dark bg + gold cross)
@@ -344,14 +345,22 @@ Full action plan: `seo_actions.md`
 ### Done — Dynamic OG image per plan
 - [x] `app/plans/[id]/opengraph-image.tsx` — Next.js `ImageResponse`: unique card per plan (title + totalDays on dark background)
 
-### Pending — Submit to search engines
-- [ ] Google Search Console — add property → `https://surfbible.in` → verify via DNS TXT → submit `sitemap.xml`
-- [ ] Bing Webmaster Tools — import from GSC in one click after GSC is set up
+### Done — Proxy & CSP fixes (2026-04-28)
+- [x] `proxy.ts` `isPublic` — corrected from `/opengraph-image.png` to `/opengraph-image` (actual Next.js route has no extension); added `/icon`, `/apple-icon`
+- [x] `proxy.ts` `config.matcher` — removed stale `.png` entries; extensionless routes caught by first regex naturally
+- [x] `app/layout.tsx` — removed hardcoded `images: [{ url: "/opengraph-image.png" }]` from OG + Twitter metadata; Next.js now auto-wires the correct URL from `opengraph-image.tsx`
+- [x] `app/sitemap.ts` — excludes `topical` type plans; only curated plans in sitemap
+- [x] `lib/csp.ts` — added `clerk.<appHost>` to `script-src` + `connect-src` in all environments (Clerk Frontend API proxy loads chunks from this subdomain even in local dev)
+
+### Done — Submit to search engines
+- [x] Google Search Console — property `https://surfbible.in` verified; `sitemap.xml` submitted 2026-04-28
+- [x] Bing Webmaster Tools — imported from GSC 2026-04-28
 
 ### Phase 1.12 Notes
 - Next.js App Router auto-serves `robots.txt` and `sitemap.xml` from the `app/` route files — no `public/` files needed
-- `metadataBase` in `layout.tsx` ensures relative og:image URLs resolve correctly on Vercel preview deployments
-- Placing `icon.png` / `apple-icon.png` / `opengraph-image.png` directly in `app/` is all that's needed — Next.js auto-detects these filenames and generates the correct `<link>` tags
+- OG image routes are served at `/opengraph-image` (no extension) — never reference `/opengraph-image.png` in metadata; let Next.js auto-wire from `opengraph-image.tsx`
+- Inline SVG and system fonts (e.g. Georgia) inside `ImageResponse` fail silently in Vercel's serverless runtime — use text-only content and Satori's default Noto Sans
+- `metadataBase` in `layout.tsx` ensures relative OG image URLs resolve correctly on Vercel preview deployments
 
 ---
 
@@ -359,12 +368,14 @@ Full action plan: `seo_actions.md`
 
 Goal: users can install SurfBible on their phone homescreen and read cached passages offline.
 
-- [ ] `public/manifest.json` — web app manifest (name, icons, theme_color, display: standalone)
-- [ ] `public/icon-192.png` + `public/icon-512.png` — app icons
-- [ ] `app/layout.tsx` — add `<link rel="manifest">` and `<meta name="theme-color">`
-- [ ] `public/sw.js` — service worker: cache-first for Bible passage responses, network-first for everything else
-- [ ] `app/layout.tsx` — register service worker on mount (client component island)
-- [ ] `app/read/[planId]/page.tsx` — "Reading offline" banner when `navigator.onLine === false`
+- [x] `app/manifest.ts` — Next.js web app manifest (name, icons, theme_color, display: standalone)
+- [x] `app/api/pwa/icon-192/route.tsx` + `app/api/pwa/icon-512/route.tsx` — programmatic PNG icons via ImageResponse (dark bg + gold cross + wordmark)
+- [x] `app/layout.tsx` — `export const viewport: Viewport` with `themeColor`; `<ServiceWorkerRegister />` added
+- [x] `public/sw.js` — service worker: cache-first for ESV API + `/_next/static/`; network-first for public pages; skip auth/API routes; offline fallback 503
+- [x] `app/components/ServiceWorkerRegister.tsx` — client component that calls `navigator.serviceWorker.register("/sw.js")` on mount
+- [x] `app/read/[planId]/OfflineBanner.tsx` — client component: shows gold banner when `navigator.onLine === false`; listens to `online`/`offline` events
+- [x] `app/read/[planId]/page.tsx` — includes `<OfflineBanner />` above content
+- [x] `proxy.ts` — `/api/pwa(.*)` added to public matcher (icons accessible without auth)
 - [ ] Test on Android Chrome (Add to Homescreen) and iOS Safari (Share → Add to Homescreen)
 
 ### Phase 2.0 Notes

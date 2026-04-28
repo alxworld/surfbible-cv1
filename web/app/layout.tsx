@@ -1,13 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Lora } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { headers } from "next/headers";
 import Nav from "./components/Nav";
+import ServiceWorkerRegister from "./components/ServiceWorkerRegister";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
+
+export const viewport: Viewport = {
+  themeColor: "#080d1a",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://surfbible.in"),
@@ -48,6 +53,7 @@ export default async function RootLayout({
         <ClerkProvider nonce={nonce}>
           <Nav />
           {children}
+          <ServiceWorkerRegister />
         </ClerkProvider>
       </body>
     </html>
